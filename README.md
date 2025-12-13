@@ -36,3 +36,5 @@ Aby zobaczyć zbudowaną aplikację:
 npm run preview
 ```
 
+
+

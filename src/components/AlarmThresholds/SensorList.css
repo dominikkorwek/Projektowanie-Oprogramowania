@@ -1,0 +1,124 @@
+.sensor-list {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.5em 1em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.header-back-button {
+  border: none;
+  background-color: #e0e0e0;
+  color: #000000;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.header-back-button:hover {
+  background-color: #d0d0d0;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selection-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.selection-field {
+  flex: 1;
+  background-color: #e0e0e0;
+  padding: 0.8em 1em;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+}
+
+.selection-label {
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.select-button {
+  background-color: #ffb3ba;
+  color: #000000;
+  border: none;
+  padding: 0.8em 1.5em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 100px;
+  min-height: 50px;
+}
+
+.select-button:hover {
+  background-color: #ff9ba3;
+}
+
+.select-button:active {
+  background-color: #ff8a93;
+}
+
+.loading {
+  color: #666;
+  font-size: 1rem;
+  text-align: center;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+

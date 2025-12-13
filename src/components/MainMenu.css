@@ -1,0 +1,76 @@
+.main-menu {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.main-menu .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000000;
+  padding: 4rem 6rem;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.main-menu .title {
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #000000;
+  margin: 0 0 1rem 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.main-menu .subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #000000;
+  margin: 0 0 2rem 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.main-menu .menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.main-menu .menu-button {
+  border-radius: 6px;
+  border: none;
+  padding: 0.8em 2em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: #7dd3c0;
+  color: #000000;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  max-width: 300px;
+}
+
+.main-menu .menu-button:hover {
+  background-color: #6bc4b0;
+}
+
+.main-menu .menu-button:active {
+  background-color: #5ab39f;
+}
+
+
