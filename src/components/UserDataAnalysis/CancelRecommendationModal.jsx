@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './CancelRecommendationModal.css'
 
 function CancelRecommendationModal({ isOpen, onClose, onContinue }) {
@@ -26,5 +27,6 @@ function CancelRecommendationModal({ isOpen, onClose, onContinue }) {
 }
 
 export default CancelRecommendationModal
+
 
 

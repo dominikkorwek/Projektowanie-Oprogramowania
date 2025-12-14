@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './SensorList.css'
 
 function SensorList({ sensors, onSelectSensor, onBack }) {

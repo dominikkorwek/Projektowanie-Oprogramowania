@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './DataSummary.css'
 
 function DataSummary({ onBack, onSelectAnalysis }) {
@@ -64,5 +65,6 @@ function DataSummary({ onBack, onSelectAnalysis }) {
 }
 
 export default DataSummary
+
 
 

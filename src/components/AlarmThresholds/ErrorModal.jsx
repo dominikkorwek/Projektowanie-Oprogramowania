@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './ErrorModal.css'
 
 function ErrorModal({ isOpen, onClose, errorType, message }) {

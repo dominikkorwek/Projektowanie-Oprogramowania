@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './SuccessMessage.css'
 
 function SuccessMessage({ message, onBackToMenu }) {

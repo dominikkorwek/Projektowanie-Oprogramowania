@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './AnalysisResults.css'
 
 function AnalysisResults({ onExit, onBack }) {
@@ -45,5 +46,6 @@ function AnalysisResults({ onExit, onBack }) {
 }
 
 export default AnalysisResults
+
 
 

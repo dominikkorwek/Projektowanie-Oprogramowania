@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import './SuccessRecommendationModal.css'
 
 function SuccessRecommendationModal({ isOpen, onClose, onContinue }) {
@@ -25,5 +26,6 @@ function SuccessRecommendationModal({ isOpen, onClose, onContinue }) {
 }
 
 export default SuccessRecommendationModal
+
 
 
