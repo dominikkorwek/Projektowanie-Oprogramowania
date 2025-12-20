@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
 import './AnalysisForm.css'
+import Header from '../Header/Header'
 
 function AnalysisForm({ onBack, onSubmit, onApply }) {
   const [metrics, setMetrics] = useState([
@@ -61,12 +62,7 @@ function AnalysisForm({ onBack, onSubmit, onApply }) {
 
   return (
     <div className="analysis-form">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-back-button" onClick={onBack}>
-          Wróć
-        </button>
-      </div>
+      <Header onBack={onBack} />
 
       <div className="content">
         {/* Sekcja Metryki */}

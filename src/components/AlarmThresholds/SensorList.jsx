@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import './SensorList.css'
+import Header from '../Header/Header'
 
 function SensorList({ sensors, onSelectSensor, onBack }) {
   const dataTypes = sensors?.dataTypes || []
@@ -7,12 +8,7 @@ function SensorList({ sensors, onSelectSensor, onBack }) {
 
   return (
     <div className="sensor-list">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-back-button" onClick={onBack}>
-          Wróć
-        </button>
-      </div>
+      <Header onBack={onBack} />
       
       <div className="content">
         <div className="column">

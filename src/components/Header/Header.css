@@ -1,0 +1,123 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.5em 1em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.header-back-button,
+.header-exit-button {
+  border: none;
+  background-color: #e0e0e0;
+  color: #000000;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.header-back-button:hover,
+.header-exit-button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Sync Status Styles */
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5em 1em;
+  font-size: 0.9rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: default;
+}
+
+.sync-status.clickable {
+  cursor: pointer;
+}
+
+.sync-status.clickable:hover {
+  filter: brightness(0.95);
+}
+
+.sync-icon {
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sync-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Synchronizacja rozpoczęta - cyan */
+.sync-started {
+  background-color: #4dd0e1;
+  color: #000000;
+}
+
+/* Przesyłanie danych - cyan */
+.sync-sending {
+  background-color: #4dd0e1;
+  color: #000000;
+}
+
+/* Loading only - cyan */
+.sync-loading {
+  background-color: #4dd0e1;
+  color: #000000;
+}
+
+/* Success - green */
+.sync-success {
+  background-color: #90ee90;
+  color: #000000;
+}
+
+.sync-success .sync-icon {
+  font-weight: normal;
+}
+
+/* Error - red */
+.sync-error {
+  background-color: #ef9a9a;
+  color: #000000;
+}

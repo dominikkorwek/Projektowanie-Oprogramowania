@@ -1,0 +1,272 @@
+.sensor-diagnostics {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.5em 1em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.header-back-button {
+  border: none;
+  background-color: #e0e0e0;
+  color: #000000;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.header-back-button:hover {
+  background-color: #d0d0d0;
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: auto;
+}
+
+.diagnostics-section {
+  flex: 1 1 300px;
+  min-width: 300px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  background-color: #e0e0e0;
+  padding: 1em;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #000000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.run-button {
+  background-color: #90ee90;
+  color: #000000;
+  border: none;
+  padding: 0.8em 2em;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.run-button:hover:not(:disabled) {
+  background-color: #7dd87d;
+}
+
+.run-button:active:not(:disabled) {
+  background-color: #6bc46b;
+}
+
+.run-button.diagnosing {
+  background-color: #7dd3c0;
+  cursor: wait;
+}
+
+.run-button:disabled {
+  cursor: wait;
+}
+
+.test-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 250px);
+}
+
+.test-history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.test-history::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.test-history::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.test-history::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e0e0e0;
+  padding: 0.5em 1em;
+}
+
+.history-date {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #d0d0d0;
+  padding: 0.3em 0.8em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.history-type {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.3em 0.8em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.sensors-section {
+  min-width: 320px;
+  flex: 0 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.sensors-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sensor-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e0e0e0;
+  padding: 0.5em 1em;
+}
+
+.sensor-name {
+  min-width: 140px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.3em 0.8em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.sensor-value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: #e0e0e0;
+  padding: 0.3em 0.8em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.status-button {
+  border: none;
+  padding: 0.3em 0.8em;
+  font-size: 0.9rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  cursor: default;
+}
+
+.status-button.status-ok {
+  background-color: #90ee90;
+  color: #000000;
+}
+
+.status-button.status-error {
+  background-color: #ffb3b3;
+  color: #000000;
+}
+
+.status-button.status-diagnosing {
+  background-color: #7dd3c0;
+  color: #000000;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d0d0d0;
+  border-top-color: #7dd3c0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-message {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #666666;
+  padding: 1em;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
