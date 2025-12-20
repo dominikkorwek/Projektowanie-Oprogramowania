@@ -8,6 +8,7 @@ import DataSummary from './components/UserDataAnalysis/DataSummary'
 import AnalysisForm from './components/UserDataAnalysis/AnalysisForm'
 import AnalysisResults from './components/UserDataAnalysis/AnalysisResults'
 import RecommendationsReview from './components/UserDataAnalysis/RecommendationsReview'
+import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
 import { sensorService } from './services/sensorService'
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
     } else if (option === 'user-data-analysis') {
       setCurrentView('data-summary')
       loadUserData()
+    } else if (option === 'sensor-diagnostics') {
+      setCurrentView('sensor-diagnostics')
     }
   }
 
@@ -177,6 +180,8 @@ function App() {
       setCurrentView('analysis-form')
     } else if (currentView === 'recommendations-review') {
       setCurrentView('analysis-results')
+    } else if (currentView === 'sensor-diagnostics') {
+      setCurrentView('menu')
     }
   }
 
@@ -253,6 +258,11 @@ function App() {
           onApprove={handleApproveRecommendations}
           onCancel={handleCancelRecommendations}
           onExit={handleExit}
+        />
+      )}
+      {currentView === 'sensor-diagnostics' && (
+        <SensorDiagnostics
+          onBack={handleBack}
         />
       )}
     </div>

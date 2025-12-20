@@ -20,7 +20,12 @@ function MainMenu({ onSelectOption }) {
           >
             Analizuj dane użytkowników
           </button>
-          <button className="menu-button">Placeholder 3</button>
+          <button 
+            className="menu-button"
+            onClick={() => onSelectOption('sensor-diagnostics')}
+          >
+            Diagnostyka czujników
+          </button>
           <button className="menu-button">Placeholder 4</button>
         </div>
       </div>

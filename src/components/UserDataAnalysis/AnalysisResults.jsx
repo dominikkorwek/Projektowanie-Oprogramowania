@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import './AnalysisResults.css'
+import Header from '../Header/Header'
 
 function AnalysisResults({ onExit, onBack }) {
   // Przykładowe dane podsumowania - w przyszłości będą z API
@@ -12,12 +13,7 @@ function AnalysisResults({ onExit, onBack }) {
 
   return (
     <div className="analysis-results">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-exit-button" onClick={onExit}>
-          Wyjdź
-        </button>
-      </div>
+      <Header onExit={onExit} />
 
       <div className="content-wrapper">
         {/* Lewa strona - Tabela */}

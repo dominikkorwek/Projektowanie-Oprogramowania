@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import './DataSummary.css'
+import Header from '../Header/Header'
 
 function DataSummary({ onBack, onSelectAnalysis }) {
   // Przykładowe dane podsumowania - w przyszłości będą z API
@@ -18,12 +19,7 @@ function DataSummary({ onBack, onSelectAnalysis }) {
 
   return (
     <div className="data-summary">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-back-button" onClick={onBack}>
-          Wróć
-        </button>
-      </div>
+      <Header onBack={onBack} />
 
       <div className="content-wrapper">
         <div className="main-content">

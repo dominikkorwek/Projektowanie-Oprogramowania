@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import './ThresholdForm.css'
 import ErrorModal from './ErrorModal'
+import Header from '../Header/Header'
 
 function ThresholdForm({ selectedSensor, onSubmit, onBack, errors, errorType }) {
   const [showErrorModal, setShowErrorModal] = useState(false)
@@ -78,12 +79,7 @@ function ThresholdForm({ selectedSensor, onSubmit, onBack, errors, errorType }) 
 
   return (
     <div className="threshold-form">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-back-button" onClick={onBack}>
-          Wróć
-        </button>
-      </div>
+      <Header onBack={onBack} />
 
       <ErrorModal
         isOpen={showErrorModal}

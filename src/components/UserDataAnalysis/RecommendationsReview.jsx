@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './RecommendationsReview.css'
 import CancelRecommendationModal from './CancelRecommendationModal'
 import SuccessRecommendationModal from './SuccessRecommendationModal'
+import Header from '../Header/Header'
 
 // eslint-disable-next-line react/prop-types
 function RecommendationsReview({ onApprove, onCancel, onExit }) {
@@ -46,12 +47,7 @@ function RecommendationsReview({ onApprove, onCancel, onExit }) {
 
   return (
     <div className="recommendations-review">
-      <div className="header">
-        <div className="header-title">MooMeter</div>
-        <button className="header-exit-button" onClick={onExit}>
-          Wyjdź
-        </button>
-      </div>
+      <Header onExit={onExit} />
 
       <CancelRecommendationModal
         isOpen={showCancelModal}
