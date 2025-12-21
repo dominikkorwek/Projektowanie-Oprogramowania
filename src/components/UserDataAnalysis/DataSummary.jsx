@@ -1,21 +1,37 @@
 /* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react'
 import './DataSummary.css'
 import Header from '../Header/Header'
+import { db } from '../../database/dbClient'
 
 function DataSummary({ onBack, onSelectAnalysis }) {
-  // Przykładowe dane podsumowania - w przyszłości będą z API
-  const summaries = [
-    { label: 'Podsumowanie:', value: 'wartosc' },
-    { label: 'Podsumowanie:', value: 'wartosc' },
-    { label: 'Podsumowanie:', value: 'wartosc' },
-    { label: 'Podsumowanie:', value: 'wartosc' }
-  ]
+  const [summaries, setSummaries] = useState([])
+  const [analysisOptions, setAnalysisOptions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Przykładowe opcje analizy - w przyszłości będą z API
-  const analysisOptions = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
-    name: 'Analiza'
-  }))
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await db.fetchMultiple(['userDataSummaries', 'analysisTypes'])
+        setSummaries(data.userDataSummaries)
+        setAnalysisOptions(data.analysisTypes)
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Błąd podczas ładowania danych:', error)
+        setIsLoading(false)
+      }
+    }
+    loadData()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="data-summary">
+        <Header onBack={onBack} />
+        <div className="loading-message">Ładowanie danych...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="data-summary">
@@ -24,9 +40,9 @@ function DataSummary({ onBack, onSelectAnalysis }) {
       <div className="content-wrapper">
         <div className="main-content">
           <div className="summaries-section">
-            {summaries.map((summary, index) => (
-              <div key={index} className="summary-item">
-                <span className="summary-label">{summary.label}</span>
+            {summaries.map((summary) => (
+              <div key={summary.id} className="summary-item">
+                <span className="summary-label">{summary.label}:</span>
                 <span className="summary-value">{summary.value}</span>
               </div>
             ))}
@@ -61,6 +77,3 @@ function DataSummary({ onBack, onSelectAnalysis }) {
 }
 
 export default DataSummary
-
-
-

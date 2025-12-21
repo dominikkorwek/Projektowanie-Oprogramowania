@@ -2,108 +2,73 @@
 import { useState, useEffect } from 'react'
 import './SensorDiagnostics.css'
 import { sensorService } from '../../services/sensorService'
+import { db } from '../../database/dbClient'
 import Header from '../Header/Header'
 
 function SensorDiagnostics({ onBack }) {
   const [isDiagnosing, setIsDiagnosing] = useState(false)
-  const [testIdCounter, setTestIdCounter] = useState(5)
   const [isLoading, setIsLoading] = useState(true)
-  
-  // Stan początkowy - zostanie załadowany z sensorService
   const [diagnosticResults, setDiagnosticResults] = useState([])
+  const [testHistory, setTestHistory] = useState([])
 
-  // Załaduj listę czujników z sensorService
   useEffect(() => {
-    const loadSensors = async () => {
+    const loadData = async () => {
       try {
-        const data = await sensorService.getAvailableSensors()
-        // Generuj początkowe wyniki diagnostyczne z dataTypes
-        const initialResults = data.dataTypes.map((dataType, index) => ({
+        const [sensorsData, history] = await Promise.all([
+          sensorService.getAvailableSensors(),
+          db.diagnosticTests.findAll()
+        ])
+
+        setTestHistory(history.sort((a, b) => b.id - a.id))
+
+        const initialResults = sensorsData.dataTypes.map((dataType, index) => ({
           id: dataType.id,
           name: dataType.name,
           value: 'WARTOŚĆ',
-          // Mockowane statusy - niektóre OK, niektóre error (ostatni test miał błędy)
           status: index === 2 || index === 4 ? 'error' : 'ok'
         }))
         setDiagnosticResults(initialResults)
         setIsLoading(false)
       } catch (error) {
-        console.error('Błąd podczas ładowania czujników:', error)
+        console.error('Błąd podczas ładowania danych:', error)
         setIsLoading(false)
       }
     }
-    loadSensors()
+    loadData()
   }, [])
-
-  // Historia wszystkich testów - kumuluje się
-  const [testHistory, setTestHistory] = useState([
-    { id: 4, date: '20.12.2024', errorType: 'TYP BŁĘDU', status: 'error' },
-    { id: 3, date: '19.12.2024', errorType: 'Brak błędów', status: 'ok' },
-    { id: 2, date: '18.12.2024', errorType: 'TYP BŁĘDU', status: 'error' },
-    { id: 1, date: '17.12.2024', errorType: 'Brak błędów', status: 'ok' },
-  ])
 
   const runDiagnostics = async () => {
     setIsDiagnosing(true)
     const currentDate = new Date().toLocaleDateString('pl-PL')
-    const currentTestId = testIdCounter
-    
-    // Dodaj wpis "Diagnozowanie" na czas trwania testu
-    const diagnosingEntry = {
-      id: currentTestId,
+
+    const diagnosingEntry = await db.diagnosticTests.create({
       date: currentDate,
       errorType: 'Diagnozowanie...',
       status: 'diagnosing'
-    }
+    })
     setTestHistory(prev => [diagnosingEntry, ...prev])
-    setTestIdCounter(prev => prev + 1)
-    
-    // Symulacja diagnozowania - w przyszłości będzie to prawdziwe API call
+
     await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    // 50/50 szansa: albo wszystko OK, albo są błędy
+
     const allGreen = Math.random() > 0.5
-    
-    let newResults
-    let newTestEntry
-    
-    if (allGreen) {
-      // Wszystkie czujniki OK
-      newResults = diagnosticResults.map(sensor => ({
-        ...sensor,
-        status: 'ok'
-      }))
-      // Dodaj wpis o pomyślnym teście
-      newTestEntry = {
-        id: currentTestId,
-        date: currentDate,
-        errorType: 'Brak błędów',
-        status: 'ok'
-      }
-    } else {
-      // Niektóre czujniki mają błędy
-      newResults = diagnosticResults.map(sensor => ({
-        ...sensor,
-        status: Math.random() > 0.5 ? 'ok' : 'error'
-      }))
-      // Upewnij się, że jest przynajmniej jeden błąd
-      const hasAnyError = newResults.some(s => s.status === 'error')
-      if (!hasAnyError) {
-        newResults[0].status = 'error'
-      }
-      // Dodaj wpis o teście z błędami
-      newTestEntry = {
-        id: currentTestId,
-        date: currentDate,
-        errorType: 'TYP BŁĘDU',
-        status: 'error'
-      }
+    const newResults = diagnosticResults.map(sensor => ({
+      ...sensor,
+      status: allGreen ? 'ok' : (Math.random() > 0.5 ? 'ok' : 'error')
+    }))
+
+    if (!allGreen && !newResults.some(s => s.status === 'error')) {
+      newResults[0].status = 'error'
     }
-    
-    // Zaktualizuj wpis "Diagnozowanie" na rzeczywisty wynik
-    setTestHistory(prev => prev.map(entry => 
-      entry.id === currentTestId ? newTestEntry : entry
-    ))
+
+    const hasErrors = newResults.some(r => r.status === 'error')
+    const testResult = {
+      date: currentDate,
+      errorType: hasErrors ? 'TYP BŁĘDU' : 'Brak błędów',
+      status: hasErrors ? 'error' : 'ok'
+    }
+
+    await db.diagnosticTests.patch(diagnosingEntry.id, testResult)
+    setTestHistory(prev => prev.map(e => e.id === diagnosingEntry.id ? { ...e, ...testResult } : e))
     setDiagnosticResults(newResults)
     setIsDiagnosing(false)
   }
@@ -112,10 +77,6 @@ function SensorDiagnostics({ onBack }) {
     if (status === 'ok') return 'status-ok'
     if (status === 'diagnosing') return 'status-diagnosing'
     return 'status-error'
-  }
-
-  const getStatusText = () => {
-    return 'STAN'
   }
 
   return (
@@ -127,7 +88,7 @@ function SensorDiagnostics({ onBack }) {
         <div className="diagnostics-section">
           <div className="section-header">
             <div className="section-title">Diagnostyka czujników</div>
-            <button 
+            <button
               className={`run-button ${isDiagnosing ? 'diagnosing' : ''}`}
               onClick={runDiagnostics}
               disabled={isDiagnosing}
@@ -142,7 +103,7 @@ function SensorDiagnostics({ onBack }) {
                 <span className="history-date">{test.date}</span>
                 <span className="history-type">{test.errorType}</span>
                 <button className={`status-button ${getStatusClass(test.status)}`}>
-                  {getStatusText()}
+                  STAN
                 </button>
               </div>
             ))}
@@ -162,7 +123,7 @@ function SensorDiagnostics({ onBack }) {
                     {isDiagnosing ? <span className="loading-spinner"></span> : sensor.value}
                   </span>
                   <button className={`status-button ${isDiagnosing ? 'status-diagnosing' : getStatusClass(sensor.status)}`}>
-                    {getStatusText()}
+                    STAN
                   </button>
                 </div>
               ))
@@ -175,4 +136,3 @@ function SensorDiagnostics({ onBack }) {
 }
 
 export default SensorDiagnostics
-
