@@ -12,13 +12,42 @@ npm install
 
 ## Uruchomienie
 
-Uruchom serwer deweloperski:
+### Pełne uruchomienie (aplikacja + baza danych)
 
 ```bash
-npm run dev
+npm run dev:all
 ```
 
-Aplikacja będzie dostępna pod adresem `http://localhost:5173`
+To uruchomi jednocześnie:
+- **JSON Server** (baza danych) na `http://localhost:3001`
+- **Vite** (aplikacja React) na `http://localhost:5173`
+
+### Uruchomienie osobno
+
+```bash
+# Tylko aplikacja React
+npm run dev
+
+# Tylko baza danych
+npm run db
+```
+
+## Baza danych
+
+Projekt wykorzystuje **JSON Server** jako lokalną bazę danych opartą na pliku `db.json`.
+
+### Architektura
+
+```
+src/
+├── database/
+│   ├── dbConfig.js    # Konfiguracja (URL, headers)
+│   └── dbClient.js    # Klient bazy danych z metodami CRUD
+├── services/
+│   └── sensorService.js  # Serwis używający dbClient
+└── components/
+    └── ...               # Komponenty używające db bezpośrednio
+```
 
 ## Budowanie
 
@@ -63,6 +92,16 @@ npm run test:coverage
 
 Szczegółowe informacje o testach znajdują się w `src/services/__tests__/README.md`
 
+## Skrypty npm
 
-
-
+| Skrypt | Opis |
+|--------|------|
+| `npm run dev` | Uruchom aplikację React |
+| `npm run db` | Uruchom bazę danych JSON Server |
+| `npm run dev:all` | Uruchom aplikację i bazę danych jednocześnie |
+| `npm run build` | Zbuduj aplikację do produkcji |
+| `npm run preview` | Podgląd zbudowanej aplikacji |
+| `npm run lint` | Sprawdź kod linterem |
+| `npm test` | Uruchom testy |
+| `npm run test:ui` | Testy z interfejsem graficznym |
+| `npm run test:coverage` | Testy z pokryciem kodu |

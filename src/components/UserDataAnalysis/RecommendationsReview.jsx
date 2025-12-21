@@ -3,6 +3,7 @@ import './RecommendationsReview.css'
 import CancelRecommendationModal from './CancelRecommendationModal'
 import SuccessRecommendationModal from './SuccessRecommendationModal'
 import Header from '../Header/Header'
+import { db } from '../../database/dbClient'
 
 // eslint-disable-next-line react/prop-types
 function RecommendationsReview({ onApprove, onCancel, onExit }) {
@@ -15,34 +16,37 @@ function RecommendationsReview({ onApprove, onCancel, onExit }) {
   })
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   const handleChange = (field, value) => {
-    setRecommendations(prev => ({
-      ...prev,
-      [field]: value
-    }))
+    setRecommendations(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleApprove = () => {
-    setShowSuccessModal(true)
+  const handleApprove = async () => {
+    setIsSaving(true)
+    try {
+      await db.recommendations.create({
+        ...recommendations,
+        createdAt: new Date().toISOString()
+      })
+      setShowSuccessModal(true)
+    } catch (error) {
+      console.error('Błąd podczas zapisywania:', error)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleContinueAfterSuccess = () => {
     setShowSuccessModal(false)
-    if (onApprove) {
-      onApprove(recommendations)
-    }
+    if (onApprove) onApprove(recommendations)
   }
 
-  const handleCancel = () => {
-    setShowCancelModal(true)
-  }
+  const handleCancel = () => setShowCancelModal(true)
 
   const handleContinueAfterCancel = () => {
     setShowCancelModal(false)
-    if (onCancel) {
-      onCancel()
-    }
+    if (onCancel) onCancel()
   }
 
   return (
@@ -122,13 +126,15 @@ function RecommendationsReview({ onApprove, onCancel, onExit }) {
             type="button"
             className="approve-button"
             onClick={handleApprove}
+            disabled={isSaving}
           >
-            Zatwierdź
+            {isSaving ? 'Zapisywanie...' : 'Zatwierdź'}
           </button>
           <button
             type="button"
             className="cancel-button"
             onClick={handleCancel}
+            disabled={isSaving}
           >
             Anuluj
           </button>
@@ -139,4 +145,3 @@ function RecommendationsReview({ onApprove, onCancel, onExit }) {
 }
 
 export default RecommendationsReview
-
