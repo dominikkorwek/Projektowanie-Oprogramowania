@@ -32,6 +32,12 @@ function MainMenu({ onSelectOption }) {
           >
             Eksportuj dane
           </button>
+          <button 
+            className="menu-button"
+            onClick={() => onSelectOption('manage-fodder')}
+          >
+            Zarządzaj paszą
+          </button>
           <button className="menu-button">Placeholder 4</button>
         </div>
       </div>

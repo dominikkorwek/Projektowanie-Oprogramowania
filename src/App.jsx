@@ -10,6 +10,7 @@ import AnalysisResults from './components/UserDataAnalysis/AnalysisResults'
 import RecommendationsReview from './components/UserDataAnalysis/RecommendationsReview'
 import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
 import ExportPanel from './components/ExportData/ExportPanel'
+import ManageFodder from './components/ManageFodder/ManageFodder'
 import { sensorService } from './services/sensorService'
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
       // optionally preload data
       loadSensors()
       loadUserData()
+    } else if (option === 'manage-fodder') {
+      setCurrentView('manage-fodder')
     }
   }
 
@@ -203,6 +206,8 @@ function App() {
       setCurrentView('analysis-results')
     } else if (currentView === 'sensor-diagnostics') {
       setCurrentView('menu')
+    } else if (currentView === 'manage-fodder') {
+      setCurrentView('menu')
     } else if (currentView === 'export-panel') {
       setCurrentView('menu')
     }
@@ -290,6 +295,9 @@ function App() {
       )}
       {currentView === 'export-panel' && (
         <ExportPanel onBack={handleBack} />
+      )}
+      {currentView === 'manage-fodder' && (
+        <ManageFodder onBack={handleBack} />
       )}
     </div>
   )
