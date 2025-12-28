@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 import './ErrorModal.css'
 
-function ErrorModal({ isOpen, onClose, errorType, message }) {
+function ErrorModal({ isOpen, onClose, errorType, message, title, closeLabel }) {
   if (!isOpen) return null
 
   const getTitle = () => {
+    if (title) return title
     if (errorType === 'format') {
       return 'Błąd Formatowania'
     } else if (errorType === 'business') {
@@ -32,7 +33,7 @@ function ErrorModal({ isOpen, onClose, errorType, message }) {
         </div>
         <div className="modal-footer">
           <button className="modal-back-button" onClick={onClose}>
-            Powrót
+            {closeLabel || 'Powrót'}
           </button>
         </div>
       </div>

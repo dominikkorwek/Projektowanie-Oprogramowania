@@ -26,6 +26,12 @@ function MainMenu({ onSelectOption }) {
           >
             Diagnostyka czujników
           </button>
+          <button 
+            className="menu-button"
+            onClick={() => onSelectOption('export-data')}
+          >
+            Eksportuj dane
+          </button>
           <button className="menu-button">Placeholder 4</button>
         </div>
       </div>

@@ -1,0 +1,85 @@
+.export-panel {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px 32px 40px; /* header provides top padding; more side spacing for large screens */
+  background: #fff;
+  color: #111;
+  font-family: Arial, sans-serif;
+}
+
+.content {
+  width: 100%;
+  padding: 20px 0;
+}
+
+/* Override generic .content border from other modules (remove the visible frame) */
+.export-panel .content,
+.export-panel .content * {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the export panel fills the viewport under the Header and doesn't cause extra scroll */
+.export-panel {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root { --header-height: 72px; }
+.export-panel .content {
+  margin: 0 !important;
+  padding: 20px 40px !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - var(--header-height)) !important;
+  overflow: auto !important;
+}
+
+
+/** Using shared `Header` component for top bar and back button. */
+
+.export-columns { display: flex; gap: 24px; align-items: flex-start; width: 100%; justify-content: space-between; }
+.export-column { flex: 1; min-width: 220px; }
+.left-col { flex: 0 0 48%; }
+.middle-col { flex: 0 0 48%; }
+.list { max-height: 64vh; overflow-y: auto; /* no middle frame */ padding-right: 8px; }
+.middle-col .list { border-right: none; padding-right: 0; }
+.list-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; margin-bottom: 6px; }
+.label-text { background: transparent; padding: 10px 6px; border-radius: 0; }
+.sensors-list .label-text { width: 100%; display: inline-block; }
+.export-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 12px; margin-top: 14px; }
+.export-controls .format-block { flex: 0 0 24%; }
+.export-controls .date-block { flex: 0 0 24%; }
+.export-controls .export-action { flex: 0 0 24%; }
+.export-controls .format-block { flex: 0 0 28%; }
+.export-controls .date-block { flex: 0 0 28%; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.export-controls .export-action { flex: 0 0 28%; display: flex; justify-content: flex-end; }
+.left-col .list { padding-right: 12px; }
+.format-block, .date-block { display: flex; flex-direction: column; gap: 8px; }
+.format-item { display: flex; align-items: center; gap: 8px; }
+.date-block input { padding: 8px; border-radius: 6px; border: 1px solid #ddd; }
+.btn-export { background: #dfffe6; border: 1px solid #bfeecf; padding: 14px 28px; font-size: 16px; cursor: pointer; border-radius: 6px; }
+.btn-export.main { background: #e6ffe9; border: 1px solid #9fe6b8; padding: 20px 40px; font-size: 20px; }
+.btn-export:hover { background: #ccf7d6; }
+
+/* Responsive layout */
+@media (max-width: 1200px) {
+  .left-col, .middle-col, .right-col { max-width: none; }
+}
+
+@media (max-width: 900px) {
+  .export-columns { flex-direction: column; }
+  .sensors-list .label-text { width: auto; }
+  .list { max-height: 30vh; }
+  .export-controls { flex-direction: column; gap: 12px; }
+  .export-controls .control { width: 100%; }
+  .btn-export { width: 100%; }
+}
+
+@media (max-width: 420px) {
+  .label-text { padding: 6px 8px; }
+}
