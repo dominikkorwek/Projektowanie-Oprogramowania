@@ -26,10 +26,19 @@ function CowRow({ cow, onChange }) {
 }
 
 function ManageFodder({ onBack }) {
-  const [cows, setCows] = useState(Array.from({ length: 20 }, (_, i) => ({ id: i + 1, feed: FEEDS[i % FEEDS.length].name })))
+  const [cows, setCows] = useState(
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i + 1,
+      feed: FEEDS[i % FEEDS.length].name
+    }))
+  )
+
   const [selectedCow, setSelectedCow] = useState(null)
   const [selectedFeed, setSelectedFeed] = useState(null)
+
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false)
+  const [isNoChangeModalOpen, setIsNoChangeModalOpen] = useState(false)
 
   function handleOpenChange(cow) {
     setSelectedCow(cow)
@@ -42,15 +51,24 @@ function ManageFodder({ onBack }) {
   }
 
   function handleAccept(feed) {
-    if (!feed) return
-    setCows(prev => prev.map(c => c.id === selectedCow.id ? { ...c, feed: feed.name } : c))
-    setSelectedCow(null)
-    setSelectedFeed(null)
-  }
+    if (!feed || !selectedCow) return
 
-  function handleCancelDetail() {
+    // 🔴 BRAK ZMIAN
+    if (feed.name === selectedCow.feed) {
+      setIsNoChangeModalOpen(true)
+      return
+    }
+
+    // ✅ ZMIANA
+    setCows(prev =>
+      prev.map(c =>
+        c.id === selectedCow.id ? { ...c, feed: feed.name } : c
+      )
+    )
+
     setSelectedCow(null)
     setSelectedFeed(null)
+    setIsAcceptModalOpen(true)
   }
 
   function showCancelModal() {
@@ -58,27 +76,25 @@ function ManageFodder({ onBack }) {
   }
 
   function onCancelModalContinue() {
-    // Close modal and return to list
     setIsCancelModalOpen(false)
     setSelectedCow(null)
     setSelectedFeed(null)
   }
 
   function onCancelModalClose() {
-    // close without navigating (overlay close) - match expected behaviour: act same as continue
     onCancelModalContinue()
   }
 
-  // header back behavior: when in detail, header back should open cancel modal; otherwise call parent back
   const headerBack = selectedCow ? showCancelModal : onBack
 
   return (
     <div className="manage-fodder">
       <Header onBack={headerBack} />
+
       <div className="content">
         {!selectedCow && (
           <div className="cow-grid">
-            {cows.map((c) => (
+            {cows.map(c => (
               <CowRow key={c.id} cow={c} onChange={handleOpenChange} />
             ))}
           </div>
@@ -91,18 +107,40 @@ function ManageFodder({ onBack }) {
             selectedFeed={selectedFeed}
             onSelectFeed={handleSelectFeed}
             onAccept={handleAccept}
-            onCancel={handleCancelDetail}
           />
         )}
 
+        {/* ❌ ANULOWANIE */}
         <ErrorModal
           isOpen={isCancelModalOpen}
           onClose={onCancelModalClose}
-          headerLabel={"Komunikat"}
+          headerLabel="Komunikat"
           centerAction
           confirmAction={{ label: 'Dalej', onClick: onCancelModalContinue }}
         >
           <div>Zmiana została anulowana.</div>
+        </ErrorModal>
+
+        {/* ✅ ZAPIS */}
+        <ErrorModal
+          isOpen={isAcceptModalOpen}
+          onClose={() => setIsAcceptModalOpen(false)}
+          headerLabel="Komunikat"
+          centerAction
+          confirmAction={{ label: 'Dalej', onClick: () => setIsAcceptModalOpen(false) }}
+        >
+          <div>Zmiany zostały zapisane.</div>
+        </ErrorModal>
+
+        {/* ⚠️ BRAK ZMIAN */}
+        <ErrorModal
+          isOpen={isNoChangeModalOpen}
+          onClose={() => setIsNoChangeModalOpen(false)}
+          headerLabel="Komunikat"
+          centerAction
+          confirmAction={{ label: 'Dalej', onClick: () => setIsNoChangeModalOpen(false) }}
+        >
+          <div>Brak zmian, proszę wybrać inną paszę.</div>
         </ErrorModal>
       </div>
     </div>
