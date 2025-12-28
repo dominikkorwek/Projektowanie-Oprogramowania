@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useRef, useState } from 'react';
 import './ExportPanel.css';
 import Header from '../Header/Header'
 import ErrorModal from '../AlarmThresholds/ErrorModal'
@@ -30,6 +30,11 @@ export default function ExportPanel({ onExport, onBack }) {
   const [isErrorOpen, setIsErrorOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [errorTitle, setErrorTitle] = useState('')
+  const [downloadPath, setDownloadPath] = useState('')
+  const [downloadPathSelected, setDownloadPathSelected] = useState(false)
+  const [isPathModalOpen, setIsPathModalOpen] = useState(false)
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+  const fileInputRef = useRef(null)
 
   function validateParameters() {
     // require at least one measurement and one sensor selected
@@ -44,26 +49,18 @@ export default function ExportPanel({ onExport, onBack }) {
     const toDate = new Date(to)
     if (isNaN(fromDate) || isNaN(toDate) || fromDate > toDate) {
       setErrorTitle('Niepoprawne parametry')
-      setErrorMessage('Data „Od" nie może być późniejsza niż „Do"')
+      setErrorMessage('Data "Od" nie może być późniejsza niż "Do"')
       setIsErrorOpen(true)
       return false
     }
     return true
   }
 
-  async function handleExport() {
-    if (!validateParameters()) return
-
-    const payload = {
-      measurements: Array.from(selectedMeasurements),
-      sensors: Array.from(selectedSensors),
-      format,
-      from,
-      to,
-    };
-
+  async function performExport(payload) {
     if (onExport) {
       onExport(payload);
+      // show success modal even when using injected onExport handler
+      setIsSuccessOpen(true)
       return;
     }
 
@@ -83,10 +80,61 @@ export default function ExportPanel({ onExport, onBack }) {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      // Show success modal
+      setIsSuccessOpen(true)
     } catch (err) {
       console.error(err);
-      alert('Eksport nie powiódł się — sprawdź konsolę.');
+      // show error modal instead of alert; do not suggest uploading folder files
+      setErrorTitle('Niepowodzenie')
+      setErrorMessage('Eksport nie powiódł się — spróbuj ponownie')
+      setIsErrorOpen(true)
     }
+  }
+
+  async function handleExport() {
+    if (!validateParameters()) return
+
+    // parameters valid -> open path selection modal
+    setIsPathModalOpen(true)
+  }
+
+  function handleDirectorySelected(e) {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      // Do NOT read or upload all files — only mark that a folder was chosen
+      const first = files[0]
+      const rel = first.webkitRelativePath || first.name
+      const folder = rel.split('/')[0]
+      // store folder internally for later reporting, but don't display it in the selection modal
+      setDownloadPath(folder)
+      setDownloadPathSelected(true)
+    }
+    // keep modal open so user can confirm
+    // reset value so user can reselect same folder if needed
+    e.target.value = null
+  }
+
+  async function handleConfirmExport() {
+    if (!downloadPathSelected) {
+      setIsPathModalOpen(false)
+      setErrorTitle('Niepoprawne parametry')
+      setErrorMessage('Nie wybrano ścieżki pobierania — proszę wybrać folder')
+      setIsErrorOpen(true)
+      return
+    }
+
+    setIsPathModalOpen(false)
+
+    const payload = {
+      measurements: Array.from(selectedMeasurements),
+      sensors: Array.from(selectedSensors),
+      format,
+      from,
+      to,
+      downloadPath,
+    };
+
+    await performExport(payload)
   }
 
   return (
@@ -146,6 +194,39 @@ export default function ExportPanel({ onExport, onBack }) {
             <button className="btn-export main" onClick={handleExport}>Eksportuj</button>
           </div>
         </div>
+
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          webkitdirectory="true"
+          onChange={handleDirectorySelected}
+        />
+
+        <ErrorModal
+          isOpen={isPathModalOpen}
+          onClose={() => setIsPathModalOpen(false)}
+          headerLabel="Pobierz raport"
+          title={''}
+          confirmAction={{ label: 'Dalej', onClick: handleConfirmExport }}
+          confirmDisabled={!downloadPathSelected}
+          centerAction
+        >
+          <div className="modal-path-content">
+            <label className="modal-path-label">Ścieżka pobierania</label>
+            <div className="modal-path-row">
+              {/* editable input so the user can type the path manually; typing marks the path as selected */}
+              <input
+                className="modal-path-input"
+                value={downloadPath}
+                placeholder={'C:\\Users\\Pulpit\\picipolo'}
+                onChange={(e) => { setDownloadPath(e.target.value); setDownloadPathSelected(e.target.value.trim() !== ''); }}
+              />
+              <button className="modal-path-change" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Zmień</button>
+            </div>
+          </div>
+        </ErrorModal>
+
       </div>
 
       <ErrorModal
@@ -156,6 +237,20 @@ export default function ExportPanel({ onExport, onBack }) {
         closeLabel="Dalej"
       />
 
+      <ErrorModal
+        isOpen={isSuccessOpen}
+        onClose={() => setIsSuccessOpen(false)}
+        headerLabel="Komunikat"
+        title={''}
+        confirmAction={{ label: 'Dalej', onClick: () => setIsSuccessOpen(false) }}
+        centerAction
+      >
+        <div>
+          <div>Pobieranie raportu powiodło się</div>
+          <div>Raport dostępny w lokalizacji:</div>
+          <div className="modal-path-bold">{downloadPath || 'C:\\Users\\Pulpit\\picipolo'}</div>
+        </div>
+      </ErrorModal>
 
     </div>
   )
