@@ -13,14 +13,6 @@
   padding: 20px 0;
 }
 
-/* Override generic .content border from other modules (remove the visible frame) */
-.export-panel .content,
-.export-panel .content * {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
 /* Ensure the export panel fills the viewport under the Header and doesn't cause extra scroll */
 .export-panel {
   width: 100%;
@@ -91,3 +83,46 @@
 @media (max-width: 420px) {
   .label-text { padding: 6px 8px; }
 }
+
+
+.export-column,
+.format-block,
+.date-block {
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 16px;
+  background: #fff;
+}
+
+.export-action {
+  border: none;
+  padding: 16px;
+  background: transparent;
+}
+
+
+
+.export-column h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.export-controls {
+  margin-top: 24px;
+}
+
+.export-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .export-column,
+  .format-block,
+  .date-block,
+  .export-action {
+    width: 100%;
+  }
+}
+

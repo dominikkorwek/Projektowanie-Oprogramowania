@@ -53,13 +53,13 @@ function ManageFodder({ onBack }) {
   function handleAccept(feed) {
     if (!feed || !selectedCow) return
 
-    // 🔴 BRAK ZMIAN
+    // BRAK ZMIAN
     if (feed.name === selectedCow.feed) {
       setIsNoChangeModalOpen(true)
       return
     }
 
-    // ✅ ZMIANA
+    // ZMIANA
     setCows(prev =>
       prev.map(c =>
         c.id === selectedCow.id ? { ...c, feed: feed.name } : c
@@ -110,7 +110,7 @@ function ManageFodder({ onBack }) {
           />
         )}
 
-        {/* ❌ ANULOWANIE */}
+        {/*ANULOWANIE */}
         <ErrorModal
           isOpen={isCancelModalOpen}
           onClose={onCancelModalClose}
@@ -121,7 +121,7 @@ function ManageFodder({ onBack }) {
           <div>Zmiana została anulowana.</div>
         </ErrorModal>
 
-        {/* ✅ ZAPIS */}
+        {/*ZAPIS */}
         <ErrorModal
           isOpen={isAcceptModalOpen}
           onClose={() => setIsAcceptModalOpen(false)}
@@ -132,7 +132,7 @@ function ManageFodder({ onBack }) {
           <div>Zmiany zostały zapisane.</div>
         </ErrorModal>
 
-        {/* ⚠️ BRAK ZMIAN */}
+        {/*BRAK ZMIAN */}
         <ErrorModal
           isOpen={isNoChangeModalOpen}
           onClose={() => setIsNoChangeModalOpen(false)}

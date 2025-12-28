@@ -13,7 +13,7 @@ function FeedRow({ feed, isSelected, onChoose }) {
   )
 }
 
-export default function ManageFodderDetail({ cow, feeds, selectedFeed, onSelectFeed, onAccept, onCancel }) {
+export default function ManageFodderDetail({ cow, feeds, selectedFeed, onSelectFeed, onAccept}) {
   return (
     <div className="mf-detail">
       <div className="mf-detail-columns">
