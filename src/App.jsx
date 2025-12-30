@@ -45,10 +45,11 @@ function App() {
     }
   }
 
-  const [alert, setAlert] = useState(null)
+  const [alerts, setAlerts] = useState([])
 
   useEffect(() => {
-    if (!isLoggedIn) return
+    // Run alerts check only when the user opens the Air Quality view
+    if (!isLoggedIn || currentView !== 'air-quality') return
 
     const checkAlerts = async () => {
       try {
@@ -58,38 +59,51 @@ function App() {
           fetch('http://localhost:3001/sensors').then(r => r.json())
         ])
 
-        for (const m of measurements) {
+        const exceeded = measurements.filter(m => {
           const t = thresholds.find(th => String(th.sensorId) === String(m.sensorId))
-          if (!t) continue
+          if (!t) return false
           const val = parseFloat(m.value)
           const thVal = parseFloat(t.thresholdValue)
-          if (Number.isFinite(val) && Number.isFinite(thVal)) {
-            if (t.condition === 'greater' && val > thVal) {
-              const sensor = sensorsList.find(s => String(s.id) === String(m.sensorId))
-              setAlert({
-                message: t.warningMessage || 'Przekroczono wartość progową',
-                location: sensor ? sensor.name : `Czujnik ${m.sensorId}`,
-                value: m.value
-              })
-              return
-            } else if (t.condition === 'less' && val < thVal) {
-              const sensor = sensorsList.find(s => String(s.id) === String(m.sensorId))
-              setAlert({
-                message: t.warningMessage || 'Spadek poniżej wartości progowej',
-                location: sensor ? sensor.name : `Czujnik ${m.sensorId}`,
-                value: m.value
-              })
-              return
-            }
-          }
+          if (!Number.isFinite(val) || !Number.isFinite(thVal)) return false
+          return (t.condition === 'greater' && val > thVal) || (t.condition === 'less' && val < thVal)
+        })
+
+        if (exceeded.length === 0) return
+
+        // Build array of alerts, one per sensor
+        const alertsToShow = []
+        const bySensor = {}
+        for (const e of exceeded) {
+          const id = String(e.sensorId)
+          bySensor[id] = bySensor[id] || []
+          bySensor[id].push(e)
         }
+
+        for (const sid of Object.keys(bySensor)) {
+          const group = bySensor[sid]
+          const sensor = sensorsList.find(s => String(s.id) === String(sid))
+          const values = group.map(g => parseFloat(g.value)).filter(v => Number.isFinite(v))
+          const avg = values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : null
+          const startTs = new Date(Math.min(...group.map(g => new Date(g.timestamp).getTime())))
+          const startTime = startTs.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          const firstThreshold = thresholds.find(th => String(th.sensorId) === String(sid))
+          alertsToShow.push({
+            message: firstThreshold?.warningMessage || 'Przekroczono wartość progową',
+            location: sensor ? sensor.name : `Czujnik ${sid}`,
+            value: avg,
+            unit: sensor?.type === 'co2' ? 'ppm' : sensor?.type === 'pm2_5' || sensor?.type === 'pm10' ? 'µg/m³' : '',
+            startTime
+          })
+        }
+
+        setAlerts(alertsToShow)
       } catch (err) {
         console.error('Błąd sprawdzania alertów:', err)
       }
     }
 
     checkAlerts()
-  }, [isLoggedIn])
+  }, [isLoggedIn, currentView])
 
   const loadUserData = async () => {
     // Symulacja ładowania danych użytkowników
@@ -237,6 +251,8 @@ function App() {
       setCurrentView('analysis-results')
     } else if (currentView === 'sensor-diagnostics') {
       setCurrentView('menu')
+    } else if (currentView === 'air-quality') {
+      setCurrentView('menu')
     }
   }
 
@@ -268,7 +284,9 @@ function App() {
 
   return (
     <div className="App">
-      {alert && <AlertModal alert={alert} onClose={() => setAlert(null)} />}
+      {alerts.length > 0 && (
+        <AlertModal alert={alerts[0]} onClose={() => setAlerts(prev => prev.slice(1))} />
+      )}
       {currentView === 'menu' && (
         <MainMenu onSelectOption={handleSelectOption} />
       )}
@@ -326,7 +344,7 @@ function App() {
         />
       )}
       {currentView === 'air-quality' && (
-        <AirQuality onBack={handleBack} />
+        <AirQuality onBack={handleBack} alert={alerts[0]} />
       )}
     </div>
   )

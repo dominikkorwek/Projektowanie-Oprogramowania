@@ -16,13 +16,27 @@
   text-align: center;
 }
 
-.alert-header {
-  font-size: 24px;
-  font-weight: 600;
+
+.alert-pill {
+  display: inline-block;
+  background: #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
   margin-bottom: 12px;
 }
 
-.alert-body p {
+.alert-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 6px 0 6px 0;
+}
+
+.alert-subtitle {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.alert-details p {
   font-size: 18px;
   margin: 8px 0;
 }
