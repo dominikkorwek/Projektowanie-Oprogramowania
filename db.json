@@ -1,46 +1,199 @@
 {
   "dataTypes": [
-    { "id": 1, "name": "Temperatura", "type": "temperature" },
-    { "id": 2, "name": "Wilgotność", "type": "humidity" },
-    { "id": 3, "name": "Ciśnienie", "type": "pressure" },
-    { "id": 4, "name": "Poziom wody", "type": "water_level" },
-    { "id": 5, "name": "Prędkość wiatru", "type": "wind_speed" },
-    { "id": 6, "name": "Kierunek wiatru", "type": "wind_direction" },
-    { "id": 7, "name": "Natężenie światła", "type": "light_intensity" }
+    {
+      "id": "1",
+      "name": "Temperatura",
+      "type": "temperature"
+    },
+    {
+      "id": "2",
+      "name": "Wilgotność",
+      "type": "humidity"
+    },
+    {
+      "id": "3",
+      "name": "Ciśnienie",
+      "type": "pressure"
+    },
+    {
+      "id": "4",
+      "name": "Poziom wody",
+      "type": "water_level"
+    },
+    {
+      "id": "5",
+      "name": "Prędkość wiatru",
+      "type": "wind_speed"
+    },
+    {
+      "id": "6",
+      "name": "Kierunek wiatru",
+      "type": "wind_direction"
+    },
+    {
+      "id": "7",
+      "name": "Natężenie światła",
+      "type": "light_intensity"
+    }
   ],
   "sensors": [
-    { "id": 1, "name": "Sensor 1", "type": "sensor_1" },
-    { "id": 2, "name": "Sensor 2", "type": "sensor_2" },
-    { "id": 3, "name": "Sensor 3", "type": "sensor_3" },
-    { "id": 4, "name": "Sensor 4", "type": "sensor_4" },
-    { "id": 5, "name": "Sensor 5", "type": "sensor_5" },
-    { "id": 6, "name": "Sensor 6", "type": "sensor_6" },
-    { "id": 7, "name": "Sensor 7", "type": "sensor_7" }
+    {
+      "id": "1",
+      "name": "Sensor 1",
+      "type": "sensor_1"
+    },
+    {
+      "id": "2",
+      "name": "Sensor 2",
+      "type": "sensor_2"
+    },
+    {
+      "id": "3",
+      "name": "Sensor 3",
+      "type": "sensor_3"
+    },
+    {
+      "id": "4",
+      "name": "Sensor 4",
+      "type": "sensor_4"
+    },
+    {
+      "id": "5",
+      "name": "Sensor 5",
+      "type": "sensor_5"
+    },
+    {
+      "id": "6",
+      "name": "Sensor 6",
+      "type": "sensor_6"
+    },
+    {
+      "id": "7",
+      "name": "Sensor 7",
+      "type": "sensor_7"
+    }
   ],
-  "alarmThresholds": [],
+  "alarmThresholds": [
+    {
+      "id": 1,
+      "sensorId": "1",
+      "thresholdValue": "1",
+      "condition": "greater",
+      "warningMessage": "1",
+      "createdAt": "2025-12-30T15:36:55.014Z"
+    }
+  ],
   "diagnosticTests": [
-    { "id": 1, "date": "17.12.2024", "errorType": "Brak błędów", "status": "ok" },
-    { "id": 2, "date": "18.12.2024", "errorType": "TYP BŁĘDU", "status": "error" },
-    { "id": 3, "date": "19.12.2024", "errorType": "Brak błędów", "status": "ok" },
-    { "id": 4, "date": "20.12.2024", "errorType": "TYP BŁĘDU", "status": "error" }
+    {
+      "id": "1",
+      "date": "17.12.2024",
+      "errorType": "Brak błędów",
+      "status": "ok"
+    },
+    {
+      "id": "2",
+      "date": "18.12.2024",
+      "errorType": "TYP BŁĘDU",
+      "status": "error"
+    },
+    {
+      "id": "3",
+      "date": "19.12.2024",
+      "errorType": "Brak błędów",
+      "status": "ok"
+    },
+    {
+      "id": "4",
+      "date": "20.12.2024",
+      "errorType": "TYP BŁĘDU",
+      "status": "error"
+    }
   ],
   "userDataSummaries": [
-    { "id": 1, "label": "Podsumowanie", "value": "wartosc" },
-    { "id": 2, "label": "Podsumowanie", "value": "wartosc" },
-    { "id": 3, "label": "Podsumowanie", "value": "wartosc" },
-    { "id": 4, "label": "Podsumowanie", "value": "wartosc" }
+    {
+      "id": "1",
+      "label": "Podsumowanie",
+      "value": "wartosc"
+    },
+    {
+      "id": "2",
+      "label": "Podsumowanie",
+      "value": "wartosc"
+    },
+    {
+      "id": "3",
+      "label": "Podsumowanie",
+      "value": "wartosc"
+    },
+    {
+      "id": "4",
+      "label": "Podsumowanie",
+      "value": "wartosc"
+    }
   ],
   "analysisTypes": [
-    { "id": 1, "name": "Analiza" },
-    { "id": 2, "name": "Analiza" },
-    { "id": 3, "name": "Analiza" },
-    { "id": 4, "name": "Analiza" },
-    { "id": 5, "name": "Analiza" },
-    { "id": 6, "name": "Analiza" },
-    { "id": 7, "name": "Analiza" },
-    { "id": 8, "name": "Analiza" },
-    { "id": 9, "name": "Analiza" },
-    { "id": 10, "name": "Analiza" }
+    {
+      "id": "1",
+      "name": "Analiza"
+    },
+    {
+      "id": "2",
+      "name": "Analiza"
+    },
+    {
+      "id": "3",
+      "name": "Analiza"
+    },
+    {
+      "id": "4",
+      "name": "Analiza"
+    },
+    {
+      "id": "5",
+      "name": "Analiza"
+    },
+    {
+      "id": "6",
+      "name": "Analiza"
+    },
+    {
+      "id": "7",
+      "name": "Analiza"
+    },
+    {
+      "id": "8",
+      "name": "Analiza"
+    },
+    {
+      "id": "9",
+      "name": "Analiza"
+    },
+    {
+      "id": "10",
+      "name": "Analiza"
+    }
   ],
   "recommendations": []
+  ,
+  "users": [
+    {
+      "id": 1,
+      "login": "test",
+      "passwordHash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    }
+  ],
+  "measurements": [
+    {
+      "id": 1,
+      "sensorId": "1",
+      "value": 5,
+      "timestamp": "2025-12-30T14:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "sensorId": "2",
+      "value": 40,
+      "timestamp": "2025-12-30T14:05:00.000Z"
+    }
+  ]
 }

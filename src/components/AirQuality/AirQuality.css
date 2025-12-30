@@ -1,0 +1,19 @@
+.air-container {
+  padding: 24px;
+}
+.air-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.back {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #e9e9e9;
+  cursor: pointer;
+}
+.title { font-weight: 600; }
+.air-content { margin-top: 24px; }
+.placeholder-card { padding: 40px; background: #f3f3f3; border-radius: 8px; text-align:center; }
+.air-note { margin-top: 12px; color:#666 }

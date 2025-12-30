@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import MainMenu from './components/MainMenu'
+import Login from './components/Login/Login'
 import SensorList from './components/AlarmThresholds/SensorList'
 import ThresholdForm from './components/AlarmThresholds/ThresholdForm'
 import SuccessMessage from './components/AlarmThresholds/SuccessMessage'
@@ -10,6 +11,8 @@ import AnalysisResults from './components/UserDataAnalysis/AnalysisResults'
 import RecommendationsReview from './components/UserDataAnalysis/RecommendationsReview'
 import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
 import { sensorService } from './services/sensorService'
+import AlertModal from './components/AlertModal/AlertModal'
+import AirQuality from './components/AirQuality/AirQuality'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -20,8 +23,12 @@ function App() {
   const [errorType, setErrorType] = useState(null) // 'format' or 'business'
   const [successMessage, setSuccessMessage] = useState('')
 
-  const handleLogin = () => {
+  const [user, setUser] = useState(null)
+  const [showLogin, setShowLogin] = useState(false)
+
+  const handleLogin = (user) => {
     setIsLoggedIn(true)
+    setUser(user)
   }
 
   const handleSelectOption = (option) => {
@@ -33,8 +40,56 @@ function App() {
       loadUserData()
     } else if (option === 'sensor-diagnostics') {
       setCurrentView('sensor-diagnostics')
+    } else if (option === 'air-quality') {
+      setCurrentView('air-quality')
     }
   }
+
+  const [alert, setAlert] = useState(null)
+
+  useEffect(() => {
+    if (!isLoggedIn) return
+
+    const checkAlerts = async () => {
+      try {
+        const [measurements, thresholds, sensorsList] = await Promise.all([
+          fetch('http://localhost:3001/measurements').then(r => r.json()),
+          fetch('http://localhost:3001/alarmThresholds').then(r => r.json()),
+          fetch('http://localhost:3001/sensors').then(r => r.json())
+        ])
+
+        for (const m of measurements) {
+          const t = thresholds.find(th => String(th.sensorId) === String(m.sensorId))
+          if (!t) continue
+          const val = parseFloat(m.value)
+          const thVal = parseFloat(t.thresholdValue)
+          if (Number.isFinite(val) && Number.isFinite(thVal)) {
+            if (t.condition === 'greater' && val > thVal) {
+              const sensor = sensorsList.find(s => String(s.id) === String(m.sensorId))
+              setAlert({
+                message: t.warningMessage || 'Przekroczono wartość progową',
+                location: sensor ? sensor.name : `Czujnik ${m.sensorId}`,
+                value: m.value
+              })
+              return
+            } else if (t.condition === 'less' && val < thVal) {
+              const sensor = sensorsList.find(s => String(s.id) === String(m.sensorId))
+              setAlert({
+                message: t.warningMessage || 'Spadek poniżej wartości progowej',
+                location: sensor ? sensor.name : `Czujnik ${m.sensorId}`,
+                value: m.value
+              })
+              return
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Błąd sprawdzania alertów:', err)
+      }
+    }
+
+    checkAlerts()
+  }, [isLoggedIn])
 
   const loadUserData = async () => {
     // Symulacja ładowania danych użytkowników
@@ -196,19 +251,24 @@ function App() {
   if (!isLoggedIn) {
     return (
       <div className="App">
-        <div className="container">
-          <h1 className="title">MOO METER</h1>
-          <p className="subtitle">by MooLife</p>
-          <button className="login-button" onClick={handleLogin}>
-            Zaloguj się
-          </button>
-        </div>
+        {!showLogin ? (
+          <div className="container">
+            <h1 className="title">MOO METER</h1>
+            <p className="subtitle">by MooLife</p>
+            <button className="login-button" onClick={() => setShowLogin(true)}>
+              Zaloguj się
+            </button>
+          </div>
+        ) : (
+          <Login onLogin={handleLogin} onCancel={() => setShowLogin(false)} />
+        )}
       </div>
     )
   }
 
   return (
     <div className="App">
+      {alert && <AlertModal alert={alert} onClose={() => setAlert(null)} />}
       {currentView === 'menu' && (
         <MainMenu onSelectOption={handleSelectOption} />
       )}
@@ -264,6 +324,9 @@ function App() {
         <SensorDiagnostics
           onBack={handleBack}
         />
+      )}
+      {currentView === 'air-quality' && (
+        <AirQuality onBack={handleBack} />
       )}
     </div>
   )
