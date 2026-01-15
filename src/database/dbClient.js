@@ -65,8 +65,8 @@ function createTable(tableName) {
     async getNextId() {
       const records = await this.findAll();
       if (records.length === 0) return 1;
-      const maxId = Math.max(...records.map(r => typeof r.id === 'number' ? r.id : 0));
-      return maxId + 1;
+      const maxId = Math.max(...records.map(r => typeof r.id === 'number' ? r.id : typeof r.id === 'string' ? parseInt(r.id) : 0));
+      return String(maxId + 1);
     },
 
     async create(data) {
