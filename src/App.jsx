@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import MainMenu from './components/MainMenu'
+import Login from './components/Login/Login'
 import SensorList from './components/AlarmThresholds/SensorList'
 import ThresholdForm from './components/AlarmThresholds/ThresholdForm'
 import SuccessMessage from './components/AlarmThresholds/SuccessMessage'
@@ -12,6 +13,8 @@ import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
 import ExportPanel from './components/ExportData/ExportPanel'
 import ManageFodder from './components/ManageFodder/ManageFodder'
 import { sensorService } from './services/sensorService'
+import AlertModal from './components/AlertModal/AlertModal'
+import AirQuality from './components/AirQuality/AirQuality'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -22,8 +25,12 @@ function App() {
   const [errorType, setErrorType] = useState(null) // 'format' or 'business'
   const [successMessage, setSuccessMessage] = useState('')
 
-  const handleLogin = () => {
+  const [user, setUser] = useState(null)
+  const [showLogin, setShowLogin] = useState(false)
+
+  const handleLogin = (user) => {
     setIsLoggedIn(true)
+    setUser(user)
   }
 
   // Allow opening export panel directly via URL (e.g. /export, ?view=export or #export)
@@ -57,8 +64,70 @@ function App() {
       loadUserData()
     } else if (option === 'manage-fodder') {
       setCurrentView('manage-fodder')
+    } else if (option === 'air-quality') {
+      setCurrentView('air-quality')
     }
   }
+
+  const [alerts, setAlerts] = useState([])
+
+  useEffect(() => {
+    // Run alerts check only when the user opens the Air Quality view
+    if (!isLoggedIn || currentView !== 'air-quality') return
+
+    const checkAlerts = async () => {
+      try {
+        const [measurements, thresholds, sensorsList] = await Promise.all([
+          fetch('http://localhost:3001/measurements').then(r => r.json()),
+          fetch('http://localhost:3001/alarmThresholds').then(r => r.json()),
+          fetch('http://localhost:3001/sensors').then(r => r.json())
+        ])
+
+        const exceeded = measurements.filter(m => {
+          const t = thresholds.find(th => String(th.sensorId) === String(m.sensorId))
+          if (!t) return false
+          const val = parseFloat(m.value)
+          const thVal = parseFloat(t.thresholdValue)
+          if (!Number.isFinite(val) || !Number.isFinite(thVal)) return false
+          return (t.condition === 'greater' && val > thVal) || (t.condition === 'less' && val < thVal)
+        })
+
+        if (exceeded.length === 0) return
+
+        // Build array of alerts, one per sensor
+        const alertsToShow = []
+        const bySensor = {}
+        for (const e of exceeded) {
+          const id = String(e.sensorId)
+          bySensor[id] = bySensor[id] || []
+          bySensor[id].push(e)
+        }
+
+        for (const sid of Object.keys(bySensor)) {
+          const group = bySensor[sid]
+          const sensor = sensorsList.find(s => String(s.id) === String(sid))
+          const values = group.map(g => parseFloat(g.value)).filter(v => Number.isFinite(v))
+          const avg = values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : null
+          const startTs = new Date(Math.min(...group.map(g => new Date(g.timestamp).getTime())))
+          const startTime = startTs.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          const firstThreshold = thresholds.find(th => String(th.sensorId) === String(sid))
+          alertsToShow.push({
+            message: firstThreshold?.warningMessage || 'Przekroczono wartość progową',
+            location: sensor ? sensor.name : `Czujnik ${sid}`,
+            value: avg,
+            unit: sensor?.type === 'co2' ? 'ppm' : sensor?.type === 'pm2_5' || sensor?.type === 'pm10' ? 'µg/m³' : '',
+            startTime
+          })
+        }
+
+        setAlerts(alertsToShow)
+      } catch (err) {
+        console.error('Błąd sprawdzania alertów:', err)
+      }
+    }
+
+    checkAlerts()
+  }, [isLoggedIn, currentView])
 
   const loadUserData = async () => {
     // Symulacja ładowania danych użytkowników
@@ -210,6 +279,8 @@ function App() {
       setCurrentView('menu')
     } else if (currentView === 'export-panel') {
       setCurrentView('menu')
+    } else if (currentView === 'air-quality') {
+      setCurrentView('menu')
     }
   }
 
@@ -224,19 +295,26 @@ function App() {
   if (!isLoggedIn) {
     return (
       <div className="App">
-        <div className="container">
-          <h1 className="title">MOO METER</h1>
-          <p className="subtitle">by MooLife</p>
-          <button className="login-button" onClick={handleLogin}>
-            Zaloguj się
-          </button>
-        </div>
+        {!showLogin ? (
+          <div className="container">
+            <h1 className="title">MOO METER</h1>
+            <p className="subtitle">by MooLife</p>
+            <button className="login-button" onClick={() => setShowLogin(true)}>
+              Zaloguj się
+            </button>
+          </div>
+        ) : (
+          <Login onLogin={handleLogin} onCancel={() => setShowLogin(false)} />
+        )}
       </div>
     )
   }
 
   return (
     <div className="App">
+      {alerts.length > 0 && (
+        <AlertModal alert={alerts[0]} onClose={() => setAlerts(prev => prev.slice(1))} />
+      )}
       {currentView === 'menu' && (
         <MainMenu onSelectOption={handleSelectOption} />
       )}
@@ -298,6 +376,9 @@ function App() {
       )}
       {currentView === 'manage-fodder' && (
         <ManageFodder onBack={handleBack} />
+      )}
+      {currentView === 'air-quality' && (
+        <AirQuality onBack={handleBack} alert={alerts[0]} />
       )}
     </div>
   )

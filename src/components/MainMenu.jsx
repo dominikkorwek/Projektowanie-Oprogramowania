@@ -38,7 +38,12 @@ function MainMenu({ onSelectOption }) {
           >
             Zarządzaj paszą
           </button>
-          <button className="menu-button">Placeholder 4</button>
+          <button 
+            className="menu-button"
+            onClick={() => onSelectOption('air-quality')}
+          >
+            Jakość powietrza
+          </button>
         </div>
       </div>
     </div>

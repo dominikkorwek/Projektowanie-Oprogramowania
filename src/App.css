@@ -40,10 +40,10 @@
 }
 
 .login-button {
-  border-radius: 6px;
+  border-radius: 10px;
   border: none;
-  padding: 0.8em 2em;
-  font-size: 1rem;
+  padding: 1em 2.5em;
+  font-size: 1.05rem;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -72,10 +72,10 @@
 }
 
 .menu-button {
-  border-radius: 6px;
+  border-radius: 10px;
   border: none;
-  padding: 0.8em 2em;
-  font-size: 1rem;
+  padding: 1em 2em;
+  font-size: 1.05rem;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
