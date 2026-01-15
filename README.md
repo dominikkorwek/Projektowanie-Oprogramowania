@@ -1,6 +1,26 @@
-# Projektowanie Oprogramowania - React App
+# Projektowanie Oprogramowania - MOO METER
+
+**MOO METER by MooLife** - aplikacja webowa do monitorowania i zarządzania systemami czujników w gospodarstwie rolnym.
+
+## O projekcie
+
+MOO METER to kompleksowe narzędzie umożliwiające:
+- **Monitorowanie jakości powietrza** - śledzenie parametrów środowiskowych (PM2.5, PM10, CO2, NH3)
+- **Konfigurację progów alarmowych** - ustawianie i zarządzanie wartościami progowymi dla czujników
+- **Diagnostykę czujników** - sprawdzanie stanu i historii działania czujników
+- **Analizę danych użytkownika** - przeglądanie i analizowanie zebranych pomiarów
+- **Zarządzanie paszą** - monitorowanie i planowanie karmienia zwierząt
+- **Eksport danych** - eksportowanie pomiarów i raportów
 
 Projekt React utworzony z Vite.
+
+## Technologie
+
+- **React 18** - biblioteka do budowania interfejsu użytkownika
+- **Vite** - szybkie narzędzie do budowania aplikacji
+- **JSON Server** - lokalna baza danych REST API
+- **Vitest** - framework do testów jednostkowych
+- **ESLint** - linter do analizy kodu JavaScript/React
 
 ## Instalacja
 
@@ -36,7 +56,7 @@ npm run db
 
 Projekt wykorzystuje **JSON Server** jako lokalną bazę danych opartą na pliku `db.json`.
 
-### Architektura
+### Architektura bazy danych
 
 ```
 src/
@@ -46,22 +66,31 @@ src/
 ├── services/
 │   └── sensorService.js  # Serwis używający dbClient
 └── components/
-    └── ...               # Komponenty używające db bezpośrednio
+    └── ...               # Komponenty używające db
 ```
 
-## Budowanie
+### Struktura komponentów
 
-Aby zbudować aplikację do produkcji:
+Aplikacja składa się z następujących głównych modułów:
+
+- **Login** - system logowania użytkowników
+- **MainMenu** - menu główne aplikacji
+- **AirQuality** - monitorowanie jakości powietrza z alertami
+- **AlarmThresholds** - konfiguracja progów alarmowych dla czujników
+- **SensorDiagnostics** - diagnostyka i śledzenie stanu czujników
+- **UserDataAnalysis** - analiza zebranych danych pomiarowych
+- **ManageFodder** - zarządzanie karmą dla zwierząt
+- **ExportData** - eksport danych do różnych formatów
+
+## Budowanie i Preview
+
+Aby zbudować aplikację do produkcji i zobaczyć podgląd:
 
 ```bash
+# Zbuduj aplikację
 npm run build
-```
 
-## Podgląd produkcji
-
-Aby zobaczyć zbudowaną aplikację:
-
-```bash
+# Uruchom podgląd produkcji
 npm run preview
 ```
 
@@ -80,17 +109,7 @@ npm test -- --watch
 
 # Uruchom testy z interfejsem graficznym
 npm run test:ui
-
-# Uruchom testy z pokryciem kodu
-npm run test:coverage
 ```
-
-### Testowane metody
-
-1. **validateFormat** - walidacja formatowania danych wejściowych
-2. **validateBusiness** - walidacja reguł biznesowych dla różnych typów sensorów
-
-Szczegółowe informacje o testach znajdują się w `src/services/__tests__/README.md`
 
 ## Skrypty npm
 
@@ -104,4 +123,3 @@ Szczegółowe informacje o testach znajdują się w `src/services/__tests__/READ
 | `npm run lint` | Sprawdź kod linterem |
 | `npm test` | Uruchom testy |
 | `npm run test:ui` | Testy z interfejsem graficznym |
-| `npm run test:coverage` | Testy z pokryciem kodu |
