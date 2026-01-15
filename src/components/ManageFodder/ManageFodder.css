@@ -1,0 +1,116 @@
+:root { --header-height: 72px; }
+
+.manage-fodder {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* header sits at very top */
+  background: #fff;
+  color: #111;
+  font-family: Arial, sans-serif;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+/* Lower header further so it is fully visible (fix for clipping) */
+.manage-fodder > .header {
+  margin-top: 96px; /* increased to lower header more */
+  margin-bottom: 12px;
+}
+
+/* Reduce header offset on medium screens */
+@media (max-width: 1100px) {
+  .manage-fodder > .header { margin-top: 48px; }
+}
+/* Reduce header offset on small screens */
+@media (max-width: 700px) {
+  .manage-fodder > .header { margin-top: 20px; }
+}
+@media (max-width: 420px) {
+  .manage-fodder > .header { margin-top: 12px; }
+}
+
+/* Remove any visible borders/frames inside this panel (same approach as ExportPanel) */
+.manage-fodder .content,
+.manage-fodder .content * {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+} 
+
+.content {
+  width: 100%;
+  padding: 20px 40px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - var(--header-height)) !important;
+  overflow: auto !important;
+}
+
+.cow-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 18px; /* reduced gaps between columns */
+}
+
+.cow-row {
+  display: grid;
+  grid-template-columns: 220px 1fr; /* wider ID column so two-digit ids don't wrap */
+  align-items: center;
+  border-radius: 4px;
+  padding: 6px;
+  background: #efefef; /* light outer frame */
+  border: 6px solid #e9e9e9; /* visible light frame like in screenshot */
+}
+
+.cow-id {
+  background: #dcdcdc;
+  padding: 10px 16px;
+  font-weight: 400;
+  white-space: nowrap; /* keep ID and number on one line */
+}
+
+.cow-body {
+  padding-left: 10px;
+}
+
+.cow-inner {
+  background: #fff; /* inner white box */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.06); /* subtle right-side frame */
+  border-radius: 2px;
+}
+
+.cow-feed {
+  background: transparent;
+  width: 220px; /* centered box width */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cow-change {
+  background: #ffd6d6;
+  border: none;
+  padding: 6px 12px; /* slightly larger to match screenshot */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center text/button */
+  font-size: 0.95rem;
+  border-radius: 3px;
+}
+
+@media (max-width: 700px) {
+  .cow-grid {
+    grid-template-columns: 1fr;
+  }
+}

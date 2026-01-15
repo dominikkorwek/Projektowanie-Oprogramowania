@@ -1,0 +1,23 @@
+.mf-detail { width: 100%; padding: 24px 40px; box-sizing: border-box; }
+.mf-detail-columns { display:flex; gap: 40px; align-items:flex-start; }
+.mf-left { flex: 0 0 48%; }
+.mf-right { flex: 0 0 48%; display:flex; flex-direction:column; gap:12px; }
+
+.mf-id { background:#dcdcdc; padding:14px 20px; display:inline-block; margin-bottom:18px; }
+
+.mf-current-row { background:#e9e9e9; padding:12px; display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+.mf-current-label { font-weight:500; }
+.mf-current-value { background:#fff; padding:10px 18px; border:4px solid #e9e9e9; }
+
+.mf-chosen-box { background:#e9e9e9; padding:18px; margin-top:12px; }
+.mf-chosen-label { margin-bottom:8px; font-weight:600; }
+.mf-chosen-list { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.mf-accept { background:#dcffd9; border:1px solid #bfeecf; padding:12px 24px; cursor:pointer; }
+
+.mf-feed-row { display:flex; align-items:center; gap:12px; background:#e9e9e9; padding:10px; border-radius:4px; }
+.mf-feed-label { width:68px; }
+.mf-feed-name { background:#fff; padding:8px 12px; border:4px solid #e9e9e9; width:140px; text-align:center; }
+.mf-choose { background:#ffd6d6; border:none; padding:8px 12px; cursor:pointer; }
+
+.mf-detail-actions { margin-top:24px; }
+.mf-cancel { background:transparent; border:1px solid #ccc; padding:8px 12px; cursor:pointer; }

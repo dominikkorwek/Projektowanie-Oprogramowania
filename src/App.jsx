@@ -10,6 +10,8 @@ import AnalysisForm from './components/UserDataAnalysis/AnalysisForm'
 import AnalysisResults from './components/UserDataAnalysis/AnalysisResults'
 import RecommendationsReview from './components/UserDataAnalysis/RecommendationsReview'
 import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
+import ExportPanel from './components/ExportData/ExportPanel'
+import ManageFodder from './components/ManageFodder/ManageFodder'
 import { sensorService } from './services/sensorService'
 import AlertModal from './components/AlertModal/AlertModal'
 import AirQuality from './components/AirQuality/AirQuality'
@@ -31,6 +33,21 @@ function App() {
     setUser(user)
   }
 
+  // Allow opening export panel directly via URL (e.g. /export, ?view=export or #export)
+  useEffect(() => {
+    try {
+      const p = window.location.pathname || ''
+      const params = new URLSearchParams(window.location.search)
+      const hash = window.location.hash || ''
+      if (p.includes('/export') || params.get('view') === 'export' || hash === '#export') {
+        setIsLoggedIn(true)
+        setCurrentView('export-panel')
+      }
+    } catch (e) {
+      // ignore in non-browser env
+    }
+  }, [])
+
   const handleSelectOption = (option) => {
     if (option === 'alarm-thresholds') {
       setCurrentView('sensor-list')
@@ -40,6 +57,13 @@ function App() {
       loadUserData()
     } else if (option === 'sensor-diagnostics') {
       setCurrentView('sensor-diagnostics')
+    } else if (option === 'export-data') {
+      setCurrentView('export-panel')
+      // optionally preload data
+      loadSensors()
+      loadUserData()
+    } else if (option === 'manage-fodder') {
+      setCurrentView('manage-fodder')
     } else if (option === 'air-quality') {
       setCurrentView('air-quality')
     }
@@ -251,6 +275,10 @@ function App() {
       setCurrentView('analysis-results')
     } else if (currentView === 'sensor-diagnostics') {
       setCurrentView('menu')
+    } else if (currentView === 'manage-fodder') {
+      setCurrentView('menu')
+    } else if (currentView === 'export-panel') {
+      setCurrentView('menu')
     } else if (currentView === 'air-quality') {
       setCurrentView('menu')
     }
@@ -342,6 +370,12 @@ function App() {
         <SensorDiagnostics
           onBack={handleBack}
         />
+      )}
+      {currentView === 'export-panel' && (
+        <ExportPanel onBack={handleBack} />
+      )}
+      {currentView === 'manage-fodder' && (
+        <ManageFodder onBack={handleBack} />
       )}
       {currentView === 'air-quality' && (
         <AirQuality onBack={handleBack} alert={alerts[0]} />

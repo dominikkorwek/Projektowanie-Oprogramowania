@@ -28,6 +28,18 @@ function MainMenu({ onSelectOption }) {
           </button>
           <button 
             className="menu-button"
+            onClick={() => onSelectOption('export-data')}
+          >
+            Eksportuj dane
+          </button>
+          <button 
+            className="menu-button"
+            onClick={() => onSelectOption('manage-fodder')}
+          >
+            Zarządzaj paszą
+          </button>
+          <button 
+            className="menu-button"
             onClick={() => onSelectOption('air-quality')}
           >
             Jakość powietrza
