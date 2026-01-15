@@ -5,12 +5,32 @@ import { sensorService } from '../../services/sensorService'
 import { db } from '../../database/dbClient'
 import Header from '../Header/Header'
 
+/**
+ * Sensor diagnostics component with diagnostic test history.
+ * 
+ * Displays an interface for running sensor diagnostics and viewing the history of previous tests.
+ * The component consists of two sections:
+ * - Left side: Diagnostic test history with dates and statuses
+ * - Right side: Table of individual sensor statuses
+ * 
+ * @component
+ * @param {Object} props - Component properties
+ * @param {Function} props.onBack - Callback function invoked when the "Back" button is clicked
+ * @returns {JSX.Element} Rendered sensor diagnostics component
+ */
 function SensorDiagnostics({ onBack }) {
   const [isDiagnosing, setIsDiagnosing] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [diagnosticResults, setDiagnosticResults] = useState([])
   const [testHistory, setTestHistory] = useState([])
 
+  /**
+   * Effect that loads sensor data and diagnostic test history on component mount.
+   * 
+   * Fetches available sensors and diagnostic test history in parallel, then initializes
+   * the diagnostic results with mock data (some sensors have 'error' status for demonstration).
+   * The test history is sorted in descending order by date.
+   */
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -37,6 +57,16 @@ function SensorDiagnostics({ onBack }) {
     loadData()
   }, [])
 
+  /**
+   * Formats a date string to a localized date-time format.
+   * 
+   * Converts an ISO date string to a human-readable format using the browser's locale settings.
+   * If parsing fails, returns the original string.
+   * 
+   * @function
+   * @param {string} dateString - ISO date string to format
+   * @returns {string} Formatted date string in locale format (YYYY-MM-DD HH:MM) or original string if parsing fails
+   */
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString)
@@ -52,6 +82,23 @@ function SensorDiagnostics({ onBack }) {
     }
   }
 
+  /**
+   * Runs diagnostic tests on all sensors.
+   * 
+   * Creates a new diagnostic test entry with 'diagnosing' status, simulates a 2-second
+   * diagnostic process, then randomly determines sensor statuses. Updates the test history
+   * with the final result (either 'error' with error type or 'ok' with no errors).
+   * 
+   * The diagnostic process:
+   * 1. Creates a 'diagnosing' entry in the database and history
+   * 2. Waits 2 seconds to simulate diagnostics
+   * 3. Randomly assigns 'ok' or 'error' status to each sensor
+   * 4. Updates the database entry and history with final results
+   * 
+   * @async
+   * @function
+   * @returns {Promise<void>}
+   */
   const runDiagnostics = async () => {
     setIsDiagnosing(true)
     const currentDate = new Date().toISOString()
@@ -88,6 +135,18 @@ function SensorDiagnostics({ onBack }) {
     setIsDiagnosing(false)
   }
 
+  /**
+   * Returns the appropriate CSS class name based on the diagnostic status.
+   * 
+   * Maps status values to CSS class names for visual representation:
+   * - 'ok' -> 'status-ok'
+   * - 'diagnosing' -> 'status-diagnosing'
+   * - any other value -> 'status-error'
+   * 
+   * @function
+   * @param {string} status - Status value ('ok', 'diagnosing', 'error', etc.)
+   * @returns {string} CSS class name corresponding to the status
+   */
   const getStatusClass = (status) => {
     if (status === 'ok') return 'status-ok'
     if (status === 'diagnosing') return 'status-diagnosing'
