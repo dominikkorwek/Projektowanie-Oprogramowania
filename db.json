@@ -94,63 +94,33 @@
   "diagnosticTests": [
     {
       "id": "1",
-      "date": "14.01.2026",
+      "date": "2026-01-15T10:30:00.000Z",
       "errorType": "Brak błędów",
       "status": "ok"
     },
     {
       "id": "2",
-      "date": "18.12.2024",
+      "date": "2024-12-18T14:22:00.000Z",
       "errorType": "TYP BŁĘDU",
       "status": "error"
     },
     {
       "id": "3",
-      "date": "14.01.2026",
+      "date": "2026-01-14T09:15:00.000Z",
       "errorType": "Brak błędów",
       "status": "ok"
     },
     {
       "id": "4",
-      "date": "20.12.2024",
+      "date": "2024-12-20T16:45:00.000Z",
       "errorType": "TYP BŁĘDU",
       "status": "error"
     },
     {
-      "id": 1,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
-    },
-    {
-      "id": 2,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
-    },
-    {
-      "id": 3,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
-    },
-    {
-      "id": 4,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
-    },
-    {
-      "id": 5,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
-    },
-    {
-      "id": 6,
-      "date": "14.01.2026",
-      "errorType": "Diagnozowanie...",
-      "status": "diagnosing"
+      "id": "5",
+      "date": "2026-01-15T15:07:56.695Z",
+      "errorType": "TYP BŁĘDU",
+      "status": "error"
     }
   ],
   "userDataSummaries": [

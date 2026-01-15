@@ -19,7 +19,7 @@ function SensorDiagnostics({ onBack }) {
           db.diagnosticTests.findAll()
         ])
 
-        setTestHistory(history.sort((a, b) => b.id - a.id))
+        setTestHistory(history.sort((a, b) => new Date(b.date) - new Date(a.date)))
 
         const initialResults = sensorsData.dataTypes.map((dataType, index) => ({
           id: dataType.id,
@@ -37,9 +37,24 @@ function SensorDiagnostics({ onBack }) {
     loadData()
   }, [])
 
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleString(navigator.language, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    } catch (error) {
+      return dateString
+    }
+  }
+
   const runDiagnostics = async () => {
     setIsDiagnosing(true)
-    const currentDate = new Date().toLocaleDateString('pl-PL')
+    const currentDate = new Date().toISOString()
 
     const diagnosingEntry = await db.diagnosticTests.create({
       date: currentDate,
@@ -100,7 +115,7 @@ function SensorDiagnostics({ onBack }) {
           <div className="test-history">
             {testHistory.map((test) => (
               <div key={test.id} className="history-row">
-                <span className="history-date">{test.date}</span>
+                <span className="history-date">{formatDate(test.date)}</span>
                 <span className="history-type">{test.errorType}</span>
                 <button className={`status-button ${getStatusClass(test.status)}`}>
                   STAN
