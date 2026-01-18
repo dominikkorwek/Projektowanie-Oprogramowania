@@ -4,6 +4,28 @@ import './ThresholdForm.css'
 import ErrorModal from './ErrorModal'
 import Header from '../Header/Header'
 
+/**
+ * Threshold form component for configuring alarm thresholds and warning conditions.
+ * 
+ * Displays an interface for setting up alarm thresholds with multiple configurable rows.
+ * Each threshold row consists of:
+ * - Metric selector (temperature, pressure, methane concentration)
+ * - Operator selector (greater than, less than, equal, etc.)
+ * - Value input field
+ * - Warning message input field
+ * 
+ * The component supports adding multiple thresholds, resetting the form, and applying
+ * the configured thresholds. Validation errors are displayed in an ErrorModal.
+ * 
+ * @component
+ * @param {Object} props - Component properties
+ * @param {Object} props.selectedSensor - The selected sensor object with id, name, and type
+ * @param {Function} props.onSubmit - Callback function invoked when the form is submitted, receives a synthetic form event
+ * @param {Function} props.onBack - Callback function invoked when the "Back" button is clicked
+ * @param {Array<string>} props.errors - Array of error messages to display in the ErrorModal
+ * @param {string} props.errorType - Type of error ('format' or 'business') for ErrorModal display
+ * @returns {JSX.Element} Rendered threshold form component
+ */
 function ThresholdForm({ selectedSensor, onSubmit, onBack, errors, errorType }) {
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [thresholds, setThresholds] = useState([
@@ -12,27 +34,67 @@ function ThresholdForm({ selectedSensor, onSubmit, onBack, errors, errorType }) 
     { id: 3, metric: '', operator: '', value: '', message: '' }
   ])
 
+  /**
+   * Effect that displays ErrorModal when validation errors are present.
+   * 
+   * Monitors the errors prop and automatically opens the ErrorModal if any errors exist.
+   * The modal displays error messages based on the errorType prop.
+   */
   useEffect(() => {
     if (errors && errors.length > 0) {
       setShowErrorModal(true)
     }
   }, [errors])
 
+  /**
+   * Adds a new empty threshold row to the form.
+   * 
+   * Creates a new threshold entry with a unique ID and empty fields.
+   * The new ID is calculated as the maximum existing ID plus 1.
+   * 
+   * @function
+   */
   const handleAddThreshold = () => {
     const newId = Math.max(...thresholds.map(t => t.id), 0) + 1
     setThresholds([...thresholds, { id: newId, metric: '', operator: '', value: '', message: '' }])
   }
 
+  /**
+   * Removes a threshold row from the form by its ID.
+   * 
+   * Filters out the threshold with the specified ID from the thresholds array.
+   * 
+   * @function
+   * @param {number} id - The ID of the threshold row to remove
+   */
   const handleDeleteThreshold = (id) => {
     setThresholds(thresholds.filter(t => t.id !== id))
   }
 
+  /**
+   * Updates a specific field of a threshold row.
+   * 
+   * Modifies the threshold with the specified ID by updating the given field with the new value.
+   * Other fields of the threshold remain unchanged.
+   * 
+   * @function
+   * @param {number} id - The ID of the threshold row to update
+   * @param {string} field - The field name to update ('metric', 'operator', 'value', or 'message')
+   * @param {string} value - The new value for the specified field
+   */
   const handleThresholdChange = (id, field, value) => {
     setThresholds(thresholds.map(t => 
       t.id === id ? { ...t, [field]: value } : t
     ))
   }
 
+  /**
+   * Resets the form to its initial state with three empty threshold rows.
+   * 
+   * Restores the thresholds array to the default three empty rows.
+   * 
+   * @function
+   */
   const handleReset = () => {
     setThresholds([
       { id: 1, metric: '', operator: '', value: '', message: '' },
@@ -41,6 +103,22 @@ function ThresholdForm({ selectedSensor, onSubmit, onBack, errors, errorType }) 
     ])
   }
 
+  /**
+   * Handles form submission by converting threshold data to the expected format.
+   * 
+   * Filters only filled thresholds (all fields must have values), then creates a synthetic
+   * form event that mimics the structure expected by the onSubmit callback. Currently uses
+   * only the first filled threshold, but can be extended to support multiple thresholds.
+   * 
+   * The synthetic event provides access to form data through target.querySelector().get()
+   * method, mapping threshold fields to form field names:
+   * - value -> 'thresholdValue'
+   * - operator -> 'condition'
+   * - message -> 'warningMessage'
+   * 
+   * @function
+   * @param {Event} e - Form submission event
+   */
   const handleApply = (e) => {
     e.preventDefault()
     
