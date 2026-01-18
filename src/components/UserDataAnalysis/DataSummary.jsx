@@ -51,11 +51,10 @@ function DataSummary({ onBack, onSelectAnalysis }) {
           <div className="chart-section">
             <div className="chart-placeholder">Wykres</div>
           </div>
-        </div>
 
-        <div className="separator">
-          <div className="separator-line"></div>
-          <div className="separator-dot"></div>
+          <div className="chart-section">
+            <div className="chart-placeholder">Wykres 2</div>
+          </div>
         </div>
 
         <div className="sidebar">
