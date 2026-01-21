@@ -6,32 +6,34 @@ A full-stack application for monitoring cattle health through sensor data analys
 
 ```bash
 # Install all dependencies (root, frontend, backend)
+# Workspaces configuration handles all packages automatically
 npm install
-cd frontend && npm install
-cd ../backend && npm install
-cd ..
 
 # Set up environment variables (optional)
 # See backend/ENV_VARIABLES.md and frontend/ENV_VARIABLES.md for details
 
-# Start both frontend and backend
+# Start frontend, backend, and docs server
 npm run dev:all
 
 # Or start individually
 npm run dev:backend    # Backend on http://localhost:3001
 npm run dev:frontend   # Frontend on http://localhost:5173
+npm run dev:docs       # API docs on http://localhost:8081
 ```
 
 ## 📚 Documentation
 
 ### View API Documentation in Browser
 
+The API documentation is automatically started with `npm run dev:all` and available at `http://localhost:8081`.
+
+Alternatively, start it separately:
+
 ```bash
 # From project root
-npm run docs:serve
+npm run dev:docs      # Just the docs server
+npm run docs:serve    # Generate and serve docs
 ```
-
-This will generate JSDoc documentation and open it in your browser at `http://localhost:8081`
 
 See [JSDOC_DOCUMENTATION_SUMMARY.md](./JSDOC_DOCUMENTATION_SUMMARY.md) for details.
 
@@ -53,8 +55,10 @@ Projektowanie-Oprogramowania/
 │   ├── db.json           # JSON database
 │   ├── docs/             # Generated JSDoc (git-ignored)
 │   └── package.json
-└── package.json          # Root package (monorepo scripts)
+└── package.json          # Root package (monorepo with workspaces)
 ```
+
+This project uses **npm workspaces** for monorepo management. Running `npm install` at the root automatically installs dependencies for all packages.
 
 ## 🧪 Testing
 
@@ -77,7 +81,8 @@ npm --prefix backend test
 ```bash
 npm run dev:frontend     # Start frontend only
 npm run dev:backend      # Start backend only
-npm run dev:all          # Start both (recommended)
+npm run dev:docs         # Start docs server only
+npm run dev:all          # Start all three (recommended)
 npm run build            # Build frontend for production
 npm run preview          # Preview production build
 npm run lint             # Lint frontend code
@@ -188,6 +193,10 @@ See [backend/README.md](./backend/README.md) for complete API documentation.
 
 ### Development
 ```bash
+# Install dependencies (workspaces will install all packages)
+npm install
+
+# Start everything (frontend, backend, docs)
 npm run dev:all
 ```
 

@@ -422,6 +422,49 @@
           "status": "ok"
         }
       ]
+    },
+    {
+      "date": "2026-01-21T17:01:04.901Z",
+      "errorType": "TYP BŁĘDU",
+      "status": "error",
+      "id": "13",
+      "sensorResults": [
+        {
+          "id": "1",
+          "name": "Temperatura",
+          "status": "error"
+        },
+        {
+          "id": "2",
+          "name": "Wilgotność",
+          "status": "error"
+        },
+        {
+          "id": "3",
+          "name": "Ciśnienie",
+          "status": "error"
+        },
+        {
+          "id": "4",
+          "name": "Poziom wody",
+          "status": "error"
+        },
+        {
+          "id": "5",
+          "name": "Prędkość wiatru",
+          "status": "ok"
+        },
+        {
+          "id": "6",
+          "name": "Kierunek wiatru",
+          "status": "ok"
+        },
+        {
+          "id": "7",
+          "name": "Natężenie światła",
+          "status": "error"
+        }
+      ]
     }
   ],
   "userDataSummaries": [

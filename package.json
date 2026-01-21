@@ -2,14 +2,19 @@
   "name": "moo-meter-monorepo",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
-    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:docs": "npm --prefix backend run docs:serve",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:docs\"",
     "build": "npm --prefix frontend run build",
     "preview": "npm --prefix frontend run preview",
     "lint": "npm --prefix frontend run lint",
-    "test": "npm --prefix frontend run test && npm --prefix backend run test",
+    "test": "npm --prefix backend run test && npm --prefix frontend run test",
     "docs": "npm --prefix backend run docs",
     "docs:serve": "npm --prefix backend run docs:serve"
   },
