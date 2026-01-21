@@ -336,6 +336,92 @@
           "status": "ok"
         }
       ]
+    },
+    {
+      "date": "2026-01-21T16:29:55.975Z",
+      "errorType": "TYP BŁĘDU",
+      "status": "error",
+      "id": "11",
+      "sensorResults": [
+        {
+          "id": "1",
+          "name": "Temperatura",
+          "status": "error"
+        },
+        {
+          "id": "2",
+          "name": "Wilgotność",
+          "status": "error"
+        },
+        {
+          "id": "3",
+          "name": "Ciśnienie",
+          "status": "ok"
+        },
+        {
+          "id": "4",
+          "name": "Poziom wody",
+          "status": "error"
+        },
+        {
+          "id": "5",
+          "name": "Prędkość wiatru",
+          "status": "ok"
+        },
+        {
+          "id": "6",
+          "name": "Kierunek wiatru",
+          "status": "error"
+        },
+        {
+          "id": "7",
+          "name": "Natężenie światła",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "date": "2026-01-21T16:30:00.365Z",
+      "errorType": "Brak błędów",
+      "status": "ok",
+      "id": "12",
+      "sensorResults": [
+        {
+          "id": "1",
+          "name": "Temperatura",
+          "status": "ok"
+        },
+        {
+          "id": "2",
+          "name": "Wilgotność",
+          "status": "ok"
+        },
+        {
+          "id": "3",
+          "name": "Ciśnienie",
+          "status": "ok"
+        },
+        {
+          "id": "4",
+          "name": "Poziom wody",
+          "status": "ok"
+        },
+        {
+          "id": "5",
+          "name": "Prędkość wiatru",
+          "status": "ok"
+        },
+        {
+          "id": "6",
+          "name": "Kierunek wiatru",
+          "status": "ok"
+        },
+        {
+          "id": "7",
+          "name": "Natężenie światła",
+          "status": "ok"
+        }
+      ]
     }
   ],
   "userDataSummaries": [
