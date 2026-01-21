@@ -17,8 +17,8 @@ export default function AirQuality({ onBack, alert }) {
     ;(async () => {
       try {
         const [s, m] = await Promise.all([
-          fetch('http://localhost:3001/sensors').then(r => r.json()),
-          fetch('http://localhost:3001/measurements').then(r => r.json())
+          fetch('/api/sensors').then(r => r.json()),
+          fetch('/api/measurements').then(r => r.json())
         ])
         if (!mounted) return
         setSensors(s)

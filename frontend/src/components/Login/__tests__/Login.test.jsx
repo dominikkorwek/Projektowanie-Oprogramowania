@@ -10,15 +10,6 @@ describe('Login - Komponent logowania', () => {
     vi.clearAllMocks()
     // Mockowanie globalnego fetch
     global.fetch = vi.fn()
-    // Mockowanie crypto.subtle dla środowiska testowego
-    Object.defineProperty(global, 'crypto', {
-      value: {
-        subtle: {
-          digest: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3]).buffer)
-        }
-      },
-      configurable: true
-    })
   })
 
   it('powinien wyrenderować formularz logowania', () => {
@@ -40,14 +31,14 @@ describe('Login - Komponent logowania', () => {
   })
 
   it('powinien pomyślnie zalogować użytkownika przy poprawnych danych', async () => {
-    const mockUser = { 
-      login: 'admin', 
-      passwordHash: '010203' // Uproszczony hash pasujący do mocka crypto
+    const mockUser = {
+      id: '1',
+      login: 'admin'
     }
     
     global.fetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve([mockUser])
+      json: () => Promise.resolve(mockUser)
     })
 
     render(<Login onLogin={mockOnLogin} />)
@@ -59,17 +50,22 @@ describe('Login - Komponent logowania', () => {
     await waitFor(() => {
       expect(mockOnLogin).toHaveBeenCalledWith(mockUser)
     })
+
+    expect(global.fetch).toHaveBeenCalledWith('/api/auth/login', expect.objectContaining({
+      method: 'POST'
+    }))
   })
 
   it('powinien wyświetlić błąd przy niepoprawnym haśle', async () => {
     global.fetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve([{ login: 'admin', passwordHash: 'wrong_hash' }])
+      ok: false,
+      json: () => Promise.resolve({ message: 'Niepoprawny login lub hasło' })
     })
 
     render(<Login onLogin={mockOnLogin} />)
     
     fireEvent.change(screen.getByLabelText('login'), { target: { value: 'admin' } })
+    fireEvent.change(screen.getByLabelText('haslo'), { target: { value: 'wrong' } })
     fireEvent.click(screen.getByRole('button', { name: /zaloguj/i }))
 
     expect(await screen.findByText(/niepoprawny login lub hasło/i)).toBeInTheDocument()

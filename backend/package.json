@@ -1,0 +1,20 @@
+{
+  "name": "moo-meter-backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "pdfkit": "^0.16.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^1.6.0"
+  }
+}

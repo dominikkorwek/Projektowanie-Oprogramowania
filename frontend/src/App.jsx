@@ -77,50 +77,10 @@ function App() {
 
     const checkAlerts = async () => {
       try {
-        const [measurements, thresholds, sensorsList] = await Promise.all([
-          fetch('http://localhost:3001/measurements').then(r => r.json()),
-          fetch('http://localhost:3001/alarmThresholds').then(r => r.json()),
-          fetch('http://localhost:3001/sensors').then(r => r.json())
-        ])
-
-        const exceeded = measurements.filter(m => {
-          const t = thresholds.find(th => String(th.sensorId) === String(m.sensorId))
-          if (!t) return false
-          const val = parseFloat(m.value)
-          const thVal = parseFloat(t.thresholdValue)
-          if (!Number.isFinite(val) || !Number.isFinite(thVal)) return false
-          return (t.condition === 'greater' && val > thVal) || (t.condition === 'less' && val < thVal)
-        })
-
-        if (exceeded.length === 0) return
-
-        // Build array of alerts, one per sensor
-        const alertsToShow = []
-        const bySensor = {}
-        for (const e of exceeded) {
-          const id = String(e.sensorId)
-          bySensor[id] = bySensor[id] || []
-          bySensor[id].push(e)
+        const alertsToShow = await fetch('/api/alerts').then(r => r.json())
+        if (Array.isArray(alertsToShow) && alertsToShow.length > 0) {
+          setAlerts(alertsToShow)
         }
-
-        for (const sid of Object.keys(bySensor)) {
-          const group = bySensor[sid]
-          const sensor = sensorsList.find(s => String(s.id) === String(sid))
-          const values = group.map(g => parseFloat(g.value)).filter(v => Number.isFinite(v))
-          const avg = values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : null
-          const startTs = new Date(Math.min(...group.map(g => new Date(g.timestamp).getTime())))
-          const startTime = startTs.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          const firstThreshold = thresholds.find(th => String(th.sensorId) === String(sid))
-          alertsToShow.push({
-            message: firstThreshold?.warningMessage || 'Przekroczono wartość progową',
-            location: sensor ? sensor.name : `Czujnik ${sid}`,
-            value: avg,
-            unit: sensor?.type === 'co2' ? 'ppm' : sensor?.type === 'pm2_5' || sensor?.type === 'pm10' ? 'µg/m³' : '',
-            startTime
-          })
-        }
-
-        setAlerts(alertsToShow)
       } catch (err) {
         console.error('Błąd sprawdzania alertów:', err)
       }

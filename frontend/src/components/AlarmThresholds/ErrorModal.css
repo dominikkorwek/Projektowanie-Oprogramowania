@@ -12,7 +12,7 @@
 }
 
 .modal-dialog {
-  background-color: #dcdcdc; /* light gray */
+  background-color: #dcdcdc; 
   border-radius: 4px;
   min-width: 420px;
   max-width: 520px;
@@ -24,7 +24,6 @@
 
 .modal-header {
   padding: 0.8rem 1rem;
-  /* keep header area minimal so the white label appears as a small band */
 }
 
 .modal-header-text {
@@ -63,7 +62,7 @@
 .modal-footer {
   padding: 1rem 1.5rem 2rem 1.5rem;
   display: flex;
-  justify-content: center; /* center the single action */
+  justify-content: center; 
   align-items: center;
   border-top: none;
 }
@@ -103,9 +102,9 @@
   cursor: not-allowed;
 }
 
-/* Large green single button matching the screenshot */
+
 .modal-back-button {
-  background-color: #baf7c9; /* soft green */
+  background-color: #baf7c9; 
   color: #000000;
   border: none;
   padding: 0.9em 3.2em;

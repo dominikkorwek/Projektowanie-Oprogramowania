@@ -7,13 +7,6 @@ export default function Login({ onLogin, onCancel }) {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  async function sha256Hex(message) {
-    const enc = new TextEncoder()
-    const data = enc.encode(message)
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('')
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -24,20 +17,20 @@ export default function Login({ onLogin, onCancel }) {
 
     setLoading(true)
     try {
-      const res = await fetch(`http://localhost:3001/users?login=${encodeURIComponent(login)}`)
-      const users = await res.json()
-      if (!users || users.length === 0) {
-        setError('Niepoprawny login lub hasło')
-        setLoading(false)
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login, password })
+      })
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => ({}))
+        setError(payload?.message || 'Niepoprawny login lub hasło')
         return
       }
-      const user = users[0]
-      const hash = await sha256Hex(password)
-      if (hash === user.passwordHash) {
-        onLogin(user)
-      } else {
-        setError('Niepoprawny login lub hasło')
-      }
+
+      const user = await res.json()
+      onLogin(user)
     } catch (err) {
       console.error(err)
       setError('Błąd sieciowy. Spróbuj ponownie.')
