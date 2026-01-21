@@ -1,6 +1,19 @@
+/**
+ * Login Component Module
+ * Handles user authentication and login form.
+ * @module Login
+ */
+
 import { useState } from 'react'
 import './Login.css'
 
+/**
+ * Login component for user authentication.
+ * @param {Object} props - Component props
+ * @param {Function} props.onLogin - Callback when login is successful
+ * @param {Function} props.onCancel - Callback when login is cancelled
+ * @returns {JSX.Element} Login form component
+ */
 export default function Login({ onLogin, onCancel }) {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')

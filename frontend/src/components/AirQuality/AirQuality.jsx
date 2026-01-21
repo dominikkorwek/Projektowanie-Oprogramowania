@@ -1,7 +1,18 @@
+/**
+ * Air Quality Component Module
+ * Displays air quality metrics and sensor data with charts.
+ * @module AirQuality
+ */
+
 import './AirQuality.css'
 import { useEffect, useState, useMemo } from 'react'
 import { apiClient } from '../../services/apiClient'
 
+/**
+ * Formats timestamp to readable time string.
+ * @param {string|Date} ts - Timestamp to format
+ * @returns {string} Formatted time string
+ */
 function formatTime(ts) {
   const d = new Date(ts)
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })

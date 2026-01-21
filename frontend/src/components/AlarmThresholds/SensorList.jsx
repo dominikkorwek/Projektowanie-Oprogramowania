@@ -1,3 +1,9 @@
+/**
+ * Alarm Thresholds - Sensor List Module
+ * Displays list of sensors for alarm threshold configuration.
+ * @module SensorList
+ */
+
 /* eslint-disable react/prop-types */
 import './SensorList.css'
 import Header from '../Header/Header'

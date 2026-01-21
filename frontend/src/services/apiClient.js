@@ -1,3 +1,9 @@
+/**
+ * API Client for Frontend
+ * Handles all HTTP communication with the backend API.
+ * @module apiClient
+ */
+
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 /**

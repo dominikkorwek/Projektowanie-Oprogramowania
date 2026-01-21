@@ -1,3 +1,9 @@
+/**
+ * Header Component Module
+ * Provides application header with synchronization functionality.
+ * @module Header
+ */
+
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback } from 'react'
 import './Header.css'

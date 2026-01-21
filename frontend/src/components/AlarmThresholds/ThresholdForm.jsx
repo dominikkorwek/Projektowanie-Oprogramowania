@@ -1,3 +1,9 @@
+/**
+ * Alarm Thresholds - Threshold Form Module
+ * Form for configuring alarm thresholds for sensors.
+ * @module ThresholdForm
+ */
+
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import './ThresholdForm.css'

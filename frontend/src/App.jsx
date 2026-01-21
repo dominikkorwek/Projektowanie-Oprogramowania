@@ -1,3 +1,9 @@
+/**
+ * Main Application Component
+ * Manages application state, routing, and user authentication.
+ * @module App
+ */
+
 import { useState, useEffect } from 'react'
 import './App.css'
 import MainMenu from './components/MainMenu'
@@ -16,6 +22,11 @@ import { apiClient } from './services/apiClient'
 import AlertModal from './components/AlertModal/AlertModal'
 import AirQuality from './components/AirQuality/AirQuality'
 
+/**
+ * Main application component.
+ * Manages routing between different views and handles user authentication.
+ * @returns {JSX.Element} The application root component
+ */
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [currentView, setCurrentView] = useState('menu') // 'menu', 'sensor-list', 'threshold-form', 'success', 'data-summary', 'analysis-form', 'analysis-results', 'recommendations-review'

@@ -1,8 +1,21 @@
+/**
+ * Export Data Component Module
+ * Handles data export functionality for sensors and measurements.
+ * @module ExportData
+ */
+
 import { useRef, useState } from 'react';
 import './ExportPanel.css';
 import Header from '../Header/Header'
 import ErrorModal from '../AlarmThresholds/ErrorModal'
 
+/**
+ * Export panel component for exporting sensor data.
+ * @param {Object} props - Component props
+ * @param {Function} props.onExport - Callback when export is triggered
+ * @param {Function} props.onBack - Callback when back button is clicked
+ * @returns {JSX.Element} Export panel component
+ */
 export default function ExportPanel({ onExport, onBack }) {
   const [measurements] = useState([
     'Wielkość A',

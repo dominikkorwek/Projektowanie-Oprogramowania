@@ -1,3 +1,9 @@
+/**
+ * Sensor Diagnostics Component Module
+ * Provides diagnostic testing and history for sensors.
+ * @module SensorDiagnostics
+ */
+
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import './SensorDiagnostics.css'

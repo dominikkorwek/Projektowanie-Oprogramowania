@@ -1,3 +1,9 @@
+/**
+ * User Data Analysis - Data Summary Module
+ * Displays summary of user data for analysis selection.
+ * @module DataSummary
+ */
+
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import './DataSummary.css'

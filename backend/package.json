@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "test": "vitest run",
-    "docs": "jsdoc -c jsdoc.json",
-    "docs:serve": "npm run docs && npx http-server ./docs -o -p 8081"
+    "test": "vitest run"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,9 +14,6 @@
     "pdfkit": "^0.16.0"
   },
   "devDependencies": {
-    "docdash": "^2.0.2",
-    "http-server": "^14.1.1",
-    "jsdoc": "^4.0.5",
     "supertest": "^7.0.0",
     "vitest": "^1.6.0"
   }

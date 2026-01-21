@@ -1,0 +1,55 @@
+{
+  "source": {
+    "include": [
+      "backend/src",
+      "frontend/src",
+      "e2e"
+    ],
+    "includePattern": ".+\\.(js|jsx)$",
+    "excludePattern": "(node_modules|__tests__|test|dist|build|\\.test\\.|setup\\.js)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true,
+    "readme": "./README.md",
+    "template": "./node_modules/docdash"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "default": {
+      "outputSourceFiles": true
+    }
+  },
+  "docdash": {
+    "static": true,
+    "sort": true,
+    "search": true,
+    "collapse": false,
+    "typedefs": true,
+    "removeQuotes": "none",
+    "scripts": [],
+    "menu": {
+      "GitHub": {
+        "href": "https://github.com/yourusername/Projektowanie-Oprogramowania",
+        "target": "_blank",
+        "class": "menu-item",
+        "id": "github-link"
+      }
+    },
+    "sectionOrder": [
+      "Modules",
+      "Classes",
+      "Externals",
+      "Events",
+      "Namespaces",
+      "Mixins",
+      "Tutorials",
+      "Interfaces"
+    ]
+  }
+}
+

@@ -23,9 +23,9 @@ npm run dev:docs       # API docs on http://localhost:8081
 
 ## 📚 Documentation
 
-### View API Documentation in Browser
+### View Complete Documentation in Browser
 
-The API documentation is automatically started with `npm run dev:all` and available at `http://localhost:8081`.
+The **complete project documentation** (backend + frontend + e2e) is automatically started with `npm run dev:all` and available at `http://localhost:8081`.
 
 Alternatively, start it separately:
 
@@ -35,7 +35,10 @@ npm run dev:docs      # Just the docs server
 npm run docs:serve    # Generate and serve docs
 ```
 
-See [JSDOC_DOCUMENTATION_SUMMARY.md](./JSDOC_DOCUMENTATION_SUMMARY.md) for details.
+The documentation now covers:
+- ✅ **Backend** - All services, storage layer, API routes, and utilities
+- ✅ **Frontend** - React components, API client, and utilities  
+- ✅ **E2E Tests** - End-to-end test specifications
 
 ## 🏗️ Project Structure
 
@@ -53,8 +56,8 @@ Projektowanie-Oprogramowania/
 │   │   ├── services/     # Business logic
 │   │   └── storage/      # Data layer
 │   ├── db.json           # JSON database
-│   ├── docs/             # Generated JSDoc (git-ignored)
 │   └── package.json
+├── docs/                 # Generated JSDoc (git-ignored, entire repo)
 └── package.json          # Root package (monorepo with workspaces)
 ```
 
@@ -116,7 +119,7 @@ Frontend (React)          Backend (Express)         Database
 ✅ **All validation on backend** - Security  
 ✅ **Repository pattern** - Database abstraction  
 ✅ **Comprehensive tests** - 119 tests  
-✅ **Full documentation** - JSDoc for all services  
+✅ **Full documentation** - JSDoc for entire codebase (backend, frontend, e2e)  
 
 ## 🔧 Technologies
 
@@ -134,8 +137,6 @@ Frontend (React)          Backend (Express)         Database
 - JSDoc + Docdash theme
 
 ## 🌐 API Endpoints
-
-See [backend/README.md](./backend/README.md) for complete API documentation.
 
 ### Main Endpoints
 - `/health` - Server health check
@@ -183,11 +184,10 @@ See [backend/README.md](./backend/README.md) for complete API documentation.
 
 ## 📝 Documentation
 
-- **JSDoc** - All backend functions documented
+- **JSDoc** - Complete codebase documentation (backend + frontend + e2e)
 - **README files** - Frontend, backend, and root
 - **Test coverage** - 119 tests with clear assertions
 - **Code comments** - Complex logic explained
-- **Architecture docs** - BUSINESS_LOGIC_CLEANUP.md, TEST_COVERAGE_SUMMARY.md
 
 ## 🚀 Deployment
 
@@ -223,11 +223,7 @@ This is an educational project. When making changes:
 
 ## 📚 Additional Documentation
 
-- [JSDOC_DOCUMENTATION_SUMMARY.md](./JSDOC_DOCUMENTATION_SUMMARY.md) - Complete JSDoc guide
-- [BUSINESS_LOGIC_CLEANUP.md](./BUSINESS_LOGIC_CLEANUP.md) - Architecture decisions
-- [TEST_COVERAGE_SUMMARY.md](./TEST_COVERAGE_SUMMARY.md) - Test breakdown
-- [backend/README.md](./backend/README.md) - Backend API details
-- [backend/JSDOC_GUIDE.md](./backend/JSDOC_GUIDE.md) - Documentation usage
+- View generated JSDoc at `http://localhost:8081` (run `npm run docs:serve`)
 
 ## 📄 License
 

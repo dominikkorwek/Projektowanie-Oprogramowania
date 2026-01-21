@@ -9,18 +9,21 @@
   "scripts": {
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
-    "dev:docs": "npm --prefix backend run docs:serve",
+    "dev:docs": "npm run docs:serve",
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:docs\"",
     "build": "npm --prefix frontend run build",
     "preview": "npm --prefix frontend run preview",
     "lint": "npm --prefix frontend run lint",
     "test": "npm --prefix backend run test && npm --prefix frontend run test",
-    "docs": "npm --prefix backend run docs",
-    "docs:serve": "npm --prefix backend run docs:serve"
+    "docs": "jsdoc -c jsdoc.json",
+    "docs:serve": "npm run docs && npx http-server ./docs -o -p 8081"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
+    "docdash": "^2.0.2",
+    "http-server": "^14.1.1",
     "jscpd": "^4.0.7",
+    "jsdoc": "^4.0.5",
     "madge": "^8.0.0",
     "sloc": "^0.3.2"
   }

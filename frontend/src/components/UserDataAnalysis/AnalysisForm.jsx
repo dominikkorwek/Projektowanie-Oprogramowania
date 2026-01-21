@@ -1,3 +1,9 @@
+/**
+ * User Data Analysis - Analysis Form Module
+ * Form for configuring user data analysis parameters.
+ * @module AnalysisForm
+ */
+
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
 import './AnalysisForm.css'
