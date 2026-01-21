@@ -19,6 +19,9 @@
     "docs:serve": "npm --prefix backend run docs:serve"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "jscpd": "^4.0.7",
+    "madge": "^8.0.0",
+    "sloc": "^0.3.2"
   }
 }
