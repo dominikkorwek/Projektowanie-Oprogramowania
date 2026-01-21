@@ -10,7 +10,7 @@ export default function AlertModal({ alert, onClose }) {
         <div className="alert-title">Uwaga!</div>
         <div className="alert-subtitle">{alert.message}</div>
         <div className="alert-details">
-          <p>Kiedy: {alert.startTime} - teraz</p>
+          <p>Kiedy: {alert.startTime}</p>
           <p>Gdzie: {alert.location}</p>
           <p>Średnie stężenie: {alert.value} {alert.unit || ''}</p>
         </div>

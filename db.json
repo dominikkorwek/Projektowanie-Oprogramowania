@@ -80,15 +80,15 @@
       "thresholdValue": "30",
       "condition": "greater",
       "warningMessage": "Zbyt wysokie stężenie PM2.5",
-      "createdAt": "2025-12-30T15:36:55.014Z"
+      "createdAt": "2026-01-1715:36:55.014Z"
     },
     {
       "id": "2",
       "sensorId": "3",
       "thresholdValue": "20",
       "condition": "greater",
-      "warningMessage": "Zbyt duże stężenie CO2",
-      "createdAt": "2025-12-30T16:09:43.379Z"
+      "warningMessage": "Zbyt wysokie stężenie CO2",
+      "createdAt": "2026-01-17T16:09:43.379Z"
     }
   ],
   "diagnosticTests": [
@@ -273,6 +273,89 @@
       "sensorId": "3",
       "value": 22,
       "timestamp": "2025-12-30T10:00:00.000Z"
-    }
-  ]
+    },
+    
+  {
+    "id": "14",
+    "sensorId": "1",
+    "value": 29,
+    "timestamp": "2026-01-13T10:00:00.000Z"
+  },
+  {
+    "id": "15",
+    "sensorId": "1",
+    "value": 32,
+    "timestamp": "2026-01-14T10:00:00.000Z"
+  },
+  {
+    "id": "16",
+    "sensorId": "1",
+    "value": 35,
+    "timestamp": "2026-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "17",
+    "sensorId": "1",
+    "value": 38,
+    "timestamp": "2026-01-16T10:00:00.000Z"
+  },
+  {
+    "id": "18",
+    "sensorId": "1",
+    "value": 35,
+    "timestamp": "2026-01-17T10:00:00.000Z"
+  },
+  {
+    "id": "19",
+    "sensorId": "1",
+    "value": 33,
+    "timestamp": "2026-01-18T10:00:00.000Z"
+  },
+
+  {
+    "id": "20",
+    "sensorId": "2",
+    "value": 48,
+    "timestamp": "2026-01-13T10:00:00.000Z"
+  },
+  {
+    "id": "21",
+    "sensorId": "2",
+    "value": 44,
+    "timestamp": "2026-01-14T10:00:00.000Z"
+  },
+  {
+    "id": "22",
+    "sensorId": "2",
+    "value": 60,
+    "timestamp": "2026-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "23",
+    "sensorId": "2",
+    "value": 58,
+    "timestamp": "2026-01-16T10:00:00.000Z"
+  },
+  {
+    "id": "24",
+    "sensorId": "2",
+    "value": 55,
+    "timestamp": "2026-01-17T10:00:00.000Z"
+  },
+
+  {
+    "id": "25",
+    "sensorId": "3",
+    "value": 20,
+    "timestamp": "2026-01-18T10:00:00.000Z"
+  },
+  {
+    "id": "26",
+    "sensorId": "3",
+    "value": 23,
+    "timestamp": "2026-01-19T10:00:00.000Z"
+  }
+]
+
+  
 }
