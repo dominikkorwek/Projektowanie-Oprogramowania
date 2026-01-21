@@ -45,3 +45,4 @@ export async function getDataTypes() {
 export async function getSensors() {
   return list('sensors');
 }
+

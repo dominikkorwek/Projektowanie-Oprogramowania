@@ -131,3 +131,4 @@ describe('RecommendationsReview', () => {
     consoleError.mockRestore()
   })
 });
+

@@ -45,3 +45,4 @@ export async function getAirQualityStats(rangeStart) {
   
   return stats;
 }
+

@@ -35,3 +35,4 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 - Development: `/api` → Vite proxy → `http://localhost:3001/api`
 - Production: Full URL → `https://api.yourdomain.com/api`
+

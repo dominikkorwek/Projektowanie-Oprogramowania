@@ -189,3 +189,4 @@ Example error response:
 ## 📝 License
 
 Private project for educational purposes.
+

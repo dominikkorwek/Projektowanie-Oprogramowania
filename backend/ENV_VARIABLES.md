@@ -36,3 +36,4 @@ NODE_ENV=production
 CORS_ORIGIN=https://yourdomain.com,https://www.yourdomain.com
 DB_PATH=/var/data/moometer/db.json
 ```
+

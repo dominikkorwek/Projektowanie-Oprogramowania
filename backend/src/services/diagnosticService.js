@@ -57,3 +57,4 @@ export async function getDiagnosticTests() {
   const tests = await list('diagnosticTests');
   return tests.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
+
