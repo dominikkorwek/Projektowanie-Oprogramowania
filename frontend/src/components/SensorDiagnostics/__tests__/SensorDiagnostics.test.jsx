@@ -1,22 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import SensorDiagnostics from '../SensorDiagnostics'
-import { sensorService } from '../../../services/sensorService'
-import { db } from '../../../database/dbClient'
+import { apiClient } from '../../../services/apiClient'
 
-vi.mock('../../../services/sensorService', () => ({
-  sensorService: {
-    getAvailableSensors: vi.fn()
-  }
-}))
-
-vi.mock('../../../database/dbClient', () => ({
-  db: {
-    diagnosticTests: {
-      findAll: vi.fn(),
-      create: vi.fn(),
-      patch: vi.fn()
-    }
+vi.mock('../../../services/apiClient', () => ({
+  apiClient: {
+    getAvailableSensors: vi.fn(),
+    getDiagnosticTests: vi.fn(),
+    runDiagnostics: vi.fn()
   }
 }))
 
@@ -46,13 +37,16 @@ describe('SensorDiagnostics - Diagnostyka czujników', () => {
   ]
 
   beforeEach(() => {
-    sensorService.getAvailableSensors.mockResolvedValue(mockSensorsData)
-    db.diagnosticTests.findAll.mockResolvedValue(mockTestHistory)
-    db.diagnosticTests.create.mockImplementation((data) => 
-      Promise.resolve({ ...data, id: 3 })
-    )
-    db.diagnosticTests.patch.mockImplementation((id, data) => 
-      Promise.resolve({ ...data, id })
+    apiClient.getAvailableSensors.mockResolvedValue(mockSensorsData)
+    apiClient.getDiagnosticTests.mockResolvedValue(mockTestHistory)
+    apiClient.runDiagnostics.mockImplementation((sensors) => 
+      Promise.resolve({
+        id: 3,
+        date: new Date().toISOString(),
+        errorType: 'TYP BŁĘDU',
+        status: 'error',
+        sensorResults: sensors.map(s => ({ ...s, status: 'error' }))
+      })
     )
   })
 
@@ -92,75 +86,61 @@ describe('SensorDiagnostics - Diagnostyka czujników', () => {
   })
 
   it('powinien zmienić tekst przycisku podczas diagnostyki', async () => {
+    apiClient.runDiagnostics.mockImplementation(() => new Promise(() => {}))
+    
     render(<SensorDiagnostics />)
 
     await waitFor(() => {
       expect(screen.getByText('Temperatura')).toBeInTheDocument()
     })
-
-    vi.useFakeTimers()
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Uruchom' }))
     })
 
     expect(screen.getByRole('button', { name: 'Trwa diagnozowanie' })).toBeDisabled()
-    expect(db.diagnosticTests.create).toHaveBeenCalled()
-    
-    vi.useRealTimers()
+    expect(apiClient.runDiagnostics).toHaveBeenCalled()
   })
 
-  it('powinien dodać wpis do historii podczas diagnostyki', async () => {
+  it('powinien uruchomić diagnostykę przez backend', async () => {
     render(<SensorDiagnostics />)
 
     await waitFor(() => {
       expect(screen.getByText('Temperatura')).toBeInTheDocument()
     })
 
-    vi.useFakeTimers()
-
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Uruchom' }))
     })
 
-    expect(screen.getByText('Diagnozowanie...')).toBeInTheDocument()
-    expect(db.diagnosticTests.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        errorType: 'Diagnozowanie...',
-        status: 'diagnosing'
-      })
-    )
-    
-    vi.useRealTimers()
+    await waitFor(() => {
+      expect(apiClient.runDiagnostics).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: expect.any(String)
+          })
+        ])
+      )
+    })
   })
 
   it('powinien zakończyć diagnostykę i przywrócić przycisk "Uruchom"', async () => {
-    vi.spyOn(Math, 'random').mockReturnValue(0.6)
     render(<SensorDiagnostics />)
 
     await waitFor(() => {
       expect(screen.getByText('Temperatura')).toBeInTheDocument()
     })
 
-    vi.useFakeTimers()
-
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Uruchom' }))
     })
 
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(2000)
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Uruchom' })).not.toBeDisabled()
     })
 
-    expect(screen.getByRole('button', { name: 'Uruchom' })).not.toBeDisabled()
-    expect(db.diagnosticTests.patch).toHaveBeenCalledWith(
-      3,
-      expect.objectContaining({
-        status: expect.stringMatching(/^(ok|error)$/)
-      })
-    )
-    
-    vi.useRealTimers()
+    expect(apiClient.runDiagnostics).toHaveBeenCalled()
   })
 
   it('powinien wywołać onBack po kliknięciu przycisku "Wróć"', async () => {

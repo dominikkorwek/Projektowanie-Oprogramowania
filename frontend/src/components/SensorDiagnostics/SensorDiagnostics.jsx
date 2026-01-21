@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import './SensorDiagnostics.css'
-import { sensorService } from '../../services/sensorService'
-import { db } from '../../database/dbClient'
+import { apiClient } from '../../services/apiClient'
 import Header from '../Header/Header'
 
 /**
@@ -35,8 +34,8 @@ function SensorDiagnostics({ onBack }) {
     const loadData = async () => {
       try {
         const [sensorsData, history] = await Promise.all([
-          sensorService.getAvailableSensors(),
-          db.diagnosticTests.findAll()
+          apiClient.getAvailableSensors(),
+          apiClient.getDiagnosticTests()
         ])
 
         setTestHistory(history.sort((a, b) => new Date(b.date) - new Date(a.date)))
@@ -101,38 +100,36 @@ function SensorDiagnostics({ onBack }) {
    */
   const runDiagnostics = async () => {
     setIsDiagnosing(true)
-    const currentDate = new Date().toISOString()
-
-    const diagnosingEntry = await db.diagnosticTests.create({
-      date: currentDate,
-      errorType: 'Diagnozowanie...',
-      status: 'diagnosing'
-    })
-    setTestHistory(prev => [diagnosingEntry, ...prev])
-
-    await new Promise(resolve => setTimeout(resolve, 2000))
-
-    const allGreen = Math.random() > 0.5
-    const newResults = diagnosticResults.map(sensor => ({
-      ...sensor,
-      status: allGreen ? 'ok' : (Math.random() > 0.5 ? 'ok' : 'error')
-    }))
-
-    if (!allGreen && !newResults.some(s => s.status === 'error')) {
-      newResults[0].status = 'error'
+    
+    try {
+      // Send sensors to backend for diagnostics
+      const sensorsToTest = diagnosticResults.map(sensor => ({
+        id: sensor.id,
+        name: sensor.name
+      }))
+      
+      // Backend handles the entire diagnostic process
+      const result = await apiClient.runDiagnostics(sensorsToTest)
+      
+      // Update test history with the result
+      setTestHistory(prev => {
+        const filtered = prev.filter(e => e.id !== result.id)
+        return [result, ...filtered]
+      })
+      
+      // Update sensor results if backend returned them
+      if (result.sensorResults) {
+        const newResults = diagnosticResults.map(sensor => {
+          const backendResult = result.sensorResults.find(r => r.id === sensor.id)
+          return backendResult ? { ...sensor, status: backendResult.status } : sensor
+        })
+        setDiagnosticResults(newResults)
+      }
+    } catch (error) {
+      console.error('Błąd podczas diagnostyki:', error)
+    } finally {
+      setIsDiagnosing(false)
     }
-
-    const hasErrors = newResults.some(r => r.status === 'error')
-    const testResult = {
-      date: currentDate,
-      errorType: hasErrors ? 'TYP BŁĘDU' : 'Brak błędów',
-      status: hasErrors ? 'error' : 'ok'
-    }
-
-    await db.diagnosticTests.patch(diagnosingEntry.id, testResult)
-    setTestHistory(prev => prev.map(e => e.id === diagnosingEntry.id ? { ...e, ...testResult } : e))
-    setDiagnosticResults(newResults)
-    setIsDiagnosing(false)
   }
 
   /**

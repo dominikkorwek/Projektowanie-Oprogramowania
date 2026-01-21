@@ -1,5 +1,6 @@
 import './AirQuality.css'
 import { useEffect, useState, useMemo } from 'react'
+import { apiClient } from '../../services/apiClient'
 
 function formatTime(ts) {
   const d = new Date(ts)
@@ -69,17 +70,24 @@ export default function AirQuality({ onBack, alert }) {
     return { points, tMin, tMax, vMin, vMax }
   }, [selectedMeasurements])
 
-  // helper: compute mean for sensor type across selected range
-  const meanForType = (type) => {
-    const relevantSensorIds = sensors.filter(s => s.type === type).map(s => String(s.id))
-    const vals = measurements
-      .filter(m => relevantSensorIds.includes(String(m.sensorId)))
-      .filter(m => new Date(m.timestamp) >= rangeStart)
-      .map(m => parseFloat(m.value))
-      .filter(v => Number.isFinite(v))
-    if (vals.length === 0) return null
-    return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length)
-  }
+  // Air quality statistics from backend
+  const [airQualityStats, setAirQualityStats] = useState({})
+  
+  useEffect(() => {
+    // Load statistics from backend whenever range changes
+    const loadStats = async () => {
+      try {
+        const stats = await apiClient.getAirQualityStats(rangeStart)
+        setAirQualityStats(stats)
+      } catch (error) {
+        console.error('Error loading air quality stats:', error)
+        setAirQualityStats({})
+      }
+    }
+    loadStats()
+  }, [rangeStart])
+  
+  const meanForType = (type) => airQualityStats[type] ?? null
 
   const typeLabel = (type) => {
     switch (type) {

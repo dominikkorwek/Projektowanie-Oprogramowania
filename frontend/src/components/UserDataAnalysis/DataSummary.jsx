@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import './DataSummary.css'
 import Header from '../Header/Header'
-import { db } from '../../database/dbClient'
+import { apiClient } from '../../services/apiClient'
 
 /**
  * Data summary component for displaying user data summaries and analysis options.
@@ -37,9 +37,12 @@ function DataSummary({ onBack, onSelectAnalysis }) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await db.fetchMultiple(['userDataSummaries', 'analysisTypes'])
-        setSummaries(data.userDataSummaries)
-        setAnalysisOptions(data.analysisTypes)
+        const [userDataSummaries, analysisTypes] = await Promise.all([
+          apiClient.getUserDataSummaries(),
+          apiClient.getAnalysisTypes()
+        ])
+        setSummaries(userDataSummaries)
+        setAnalysisOptions(analysisTypes)
         setIsLoading(false)
       } catch (error) {
         console.error('Błąd podczas ładowania danych:', error)

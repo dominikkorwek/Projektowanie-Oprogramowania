@@ -48,7 +48,8 @@ function Header({ onBack, onExit, backLabel = 'Wróć', exitLabel = 'Wyjdź' }) 
    * The effect re-runs whenever syncKey changes.
    */
   useEffect(() => {
-    // Mock synchronization flow
+    // NOTE: MOCK/DEMO synchronization flow for UI demonstration
+    // In production, replace with actual backend API call
     const timers = []
 
     // State 1: "Synchronizacja rozpoczęta" -> after 1s go to "Przesyłanie danych"

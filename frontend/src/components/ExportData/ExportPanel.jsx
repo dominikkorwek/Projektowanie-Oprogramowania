@@ -36,24 +36,9 @@ export default function ExportPanel({ onExport, onBack }) {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
   const fileInputRef = useRef(null)
 
-  function validateParameters() {
-    // require at least one measurement and one sensor selected
-    if (selectedMeasurements.size === 0 || selectedSensors.size === 0) {
-      setErrorTitle('Niepoprawne parametry')
-      setErrorMessage('Proszę wprowadzić poprawne dane')
-      setIsErrorOpen(true)
-      return false
-    }
-    // require date range from <= to
-    const fromDate = new Date(from)
-    const toDate = new Date(to)
-    if (isNaN(fromDate) || isNaN(toDate) || fromDate > toDate) {
-      setErrorTitle('Niepoprawne parametry')
-      setErrorMessage('Data "Od" nie może być późniejsza niż "Do"')
-      setIsErrorOpen(true)
-      return false
-    }
-    return true
+  // Basic UI validation for better UX - backend will validate again for security
+  function hasBasicRequirements() {
+    return selectedMeasurements.size > 0 && selectedSensors.size > 0 && from && to;
   }
 
   async function performExport(payload) {
@@ -70,7 +55,17 @@ export default function ExportPanel({ onExport, onBack }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Export failed');
+      
+      if (!res.ok) {
+        // Backend validation failed - show error details
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessages = errorData.errors || ['Eksport nie powiódł się'];
+        setErrorTitle('Niepoprawne parametry');
+        setErrorMessage(errorMessages.join('. '));
+        setIsErrorOpen(true);
+        return;
+      }
+      
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -92,7 +87,13 @@ export default function ExportPanel({ onExport, onBack }) {
   }
 
   async function handleExport() {
-    if (!validateParameters()) return
+    // Basic UI check for better UX (backend validates for security)
+    if (!hasBasicRequirements()) {
+      setErrorTitle('Niepoprawne parametry')
+      setErrorMessage('Proszę wprowadzić wszystkie wymagane dane')
+      setIsErrorOpen(true)
+      return
+    }
 
     // parameters valid -> open path selection modal
     setIsPathModalOpen(true)

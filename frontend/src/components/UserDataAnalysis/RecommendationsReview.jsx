@@ -3,7 +3,7 @@ import './RecommendationsReview.css'
 import CancelRecommendationModal from './CancelRecommendationModal'
 import SuccessRecommendationModal from './SuccessRecommendationModal'
 import Header from '../Header/Header'
-import { db } from '../../database/dbClient'
+import { apiClient } from '../../services/apiClient'
 
 // eslint-disable-next-line react/prop-types
 function RecommendationsReview({ onApprove, onCancel, onExit }) {
@@ -25,7 +25,7 @@ function RecommendationsReview({ onApprove, onCancel, onExit }) {
   const handleApprove = async () => {
     setIsSaving(true)
     try {
-      await db.recommendations.create({
+      await apiClient.createRecommendation({
         ...recommendations,
         createdAt: new Date().toISOString()
       })

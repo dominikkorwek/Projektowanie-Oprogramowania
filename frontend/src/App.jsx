@@ -12,7 +12,7 @@ import RecommendationsReview from './components/UserDataAnalysis/Recommendations
 import SensorDiagnostics from './components/SensorDiagnostics/SensorDiagnostics'
 import ExportPanel from './components/ExportData/ExportPanel'
 import ManageFodder from './components/ManageFodder/ManageFodder'
-import { sensorService } from './services/sensorService'
+import { apiClient } from './services/apiClient'
 import AlertModal from './components/AlertModal/AlertModal'
 import AirQuality from './components/AirQuality/AirQuality'
 
@@ -151,7 +151,7 @@ function App() {
 
   const loadSensors = async () => {
     try {
-      const data = await sensorService.getAvailableSensors()
+      const data = await apiClient.getAvailableSensors()
       setSensors(data)
     } catch (error) {
       console.error('Błąd podczas ładowania sensorów:', error)
@@ -175,6 +175,7 @@ function App() {
     if (e.target.querySelector) {
       const formData = e.target.querySelector()
       thresholdData = {
+        sensorId: selectedSensor.id,
         thresholdValue: formData.get('thresholdValue'),
         condition: formData.get('condition'),
         warningMessage: formData.get('warningMessage')
@@ -182,37 +183,30 @@ function App() {
     } else {
       const formData = new FormData(e.target)
       thresholdData = {
+        sensorId: selectedSensor.id,
         thresholdValue: formData.get('thresholdValue'),
         condition: formData.get('condition'),
         warningMessage: formData.get('warningMessage')
       }
     }
 
-    // Walidacja formatowania
-    const formatValidation = sensorService.validateFormat(thresholdData)
-    if (!formatValidation.isValid) {
-      setFormErrors(formatValidation.errors)
-      setErrorType('format')
-      return
-    }
-
-    // Walidacja biznesowa
-    const businessValidation = sensorService.validateBusiness(thresholdData, selectedSensor)
-    if (!businessValidation.isValid) {
-      setFormErrors(businessValidation.errors)
-      setErrorType('business')
-      return
-    }
-
-    // Zapisz dane
+    // Submit to backend - validation happens there
     try {
-      const result = await sensorService.saveAlarmThresholds(selectedSensor.id, thresholdData)
-      if (result.success) {
-        setSuccessMessage(result.message)
+      const result = await apiClient.createAlarmThreshold(thresholdData)
+      // Backend returns { ok: true, data: created } on success
+      if (result) {
+        setSuccessMessage('Progi alarmowe i warunki ostrzegania zostały pomyślnie zapisane w bazie danych.')
         setCurrentView('success')
       }
     } catch (error) {
-      setFormErrors(['Wystąpił błąd podczas zapisywania danych.'])
+      // Backend returns { errors: [...], errorType: 'format'|'business' } on validation failure
+      if (error.errors && error.errors.length > 0) {
+        setFormErrors(error.errors)
+        setErrorType(error.errorType || 'format')
+      } else {
+        setFormErrors(['Wystąpił błąd podczas zapisywania danych.'])
+        setErrorType('format')
+      }
     }
   }
 

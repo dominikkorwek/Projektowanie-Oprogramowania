@@ -1,4 +1,5 @@
 import PDFDocument from 'pdfkit';
+import { validateExportParams } from './validation/exportValidation.js';
 
 function buildCsv(payload) {
   const rows = [
@@ -13,10 +14,20 @@ function buildCsv(payload) {
 }
 
 export async function generateExport(payload) {
+  // Validate parameters
+  const validation = validateExportParams(payload || {});
+  if (!validation.isValid) {
+    return {
+      ok: false,
+      status: 400,
+      errors: validation.errors
+    };
+  }
   const format = String(payload?.format || 'pdf').toLowerCase();
   if (format === 'csv') {
     const csv = buildCsv(payload || {});
     return {
+      ok: true,
       contentType: 'text/csv; charset=utf-8',
       filename: 'export.csv',
       buffer: Buffer.from(csv, 'utf8'),
@@ -46,6 +57,7 @@ export async function generateExport(payload) {
   });
 
   return {
+    ok: true,
     contentType: 'application/pdf',
     filename: 'export.pdf',
     buffer,

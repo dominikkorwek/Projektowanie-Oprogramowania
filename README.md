@@ -1,125 +1,225 @@
-# Projektowanie Oprogramowania - MOO METER
+# MooMeter - Cattle Monitoring System
 
-**MOO METER by MooLife** - aplikacja webowa do monitorowania i zarządzania systemami czujników w gospodarstwie rolnym.
+A full-stack application for monitoring cattle health through sensor data analysis.
 
-## O projekcie
-
-MOO METER to kompleksowe narzędzie umożliwiające:
-- **Monitorowanie jakości powietrza** - śledzenie parametrów środowiskowych (PM2.5, PM10, CO2, NH3)
-- **Konfigurację progów alarmowych** - ustawianie i zarządzanie wartościami progowymi dla czujników
-- **Diagnostykę czujników** - sprawdzanie stanu i historii działania czujników
-- **Analizę danych użytkownika** - przeglądanie i analizowanie zebranych pomiarów
-- **Zarządzanie paszą** - monitorowanie i planowanie karmienia zwierząt
-- **Eksport danych** - eksportowanie pomiarów i raportów
-
-Projekt React utworzony z Vite.
-
-## Technologie
-
-- **React 18** - biblioteka do budowania interfejsu użytkownika
-- **Vite** - szybkie narzędzie do budowania aplikacji
-- **JSON Server** - lokalna baza danych REST API
-- **Vitest** - framework do testów jednostkowych
-- **ESLint** - linter do analizy kodu JavaScript/React
-
-## Instalacja
-
-Zainstaluj zależności:
+## 🚀 Quick Start
 
 ```bash
+# Install all dependencies (root, frontend, backend)
 npm install
+cd frontend && npm install
+cd ../backend && npm install
+cd ..
+
+# Set up environment variables (optional)
+# See backend/ENV_VARIABLES.md and frontend/ENV_VARIABLES.md for details
+
+# Start both frontend and backend
+npm run dev:all
+
+# Or start individually
+npm run dev:backend    # Backend on http://localhost:3001
+npm run dev:frontend   # Frontend on http://localhost:5173
 ```
 
-## Uruchomienie
+## 📚 Documentation
 
-### Pełne uruchomienie (aplikacja + baza danych)
+### View API Documentation in Browser
 
+```bash
+# From project root
+npm run docs:serve
+```
+
+This will generate JSDoc documentation and open it in your browser at `http://localhost:8081`
+
+See [JSDOC_DOCUMENTATION_SUMMARY.md](./JSDOC_DOCUMENTATION_SUMMARY.md) for details.
+
+## 🏗️ Project Structure
+
+```
+Projektowanie-Oprogramowania/
+├── frontend/               # React frontend (Vite)
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── services/      # API client
+│   │   └── App.jsx        # Main app
+│   └── package.json
+├── backend/               # Express backend
+│   ├── src/
+│   │   ├── routes/       # API routes
+│   │   ├── services/     # Business logic
+│   │   └── storage/      # Data layer
+│   ├── db.json           # JSON database
+│   ├── docs/             # Generated JSDoc (git-ignored)
+│   └── package.json
+└── package.json          # Root package (monorepo scripts)
+```
+
+## 🧪 Testing
+
+```bash
+# Run all tests (frontend + backend)
+npm test
+
+# Run individually
+npm --prefix frontend test -- --run
+npm --prefix backend test
+```
+
+**Test Coverage:**
+- Backend: 34 tests passing
+- Frontend: 85 tests passing
+- **Total: 119 tests passing ✅**
+
+## 📖 Available Scripts (Root)
+
+```bash
+npm run dev:frontend     # Start frontend only
+npm run dev:backend      # Start backend only
+npm run dev:all          # Start both (recommended)
+npm run build            # Build frontend for production
+npm run preview          # Preview production build
+npm run lint             # Lint frontend code
+npm run test             # Run all tests
+npm run docs             # Generate JSDoc documentation
+npm run docs:serve       # Generate docs and open in browser
+```
+
+## 🏛️ Architecture
+
+### Separation of Concerns
+
+```
+Frontend (React)          Backend (Express)         Database
+     │                          │                       │
+     │  HTTP/REST API           │                       │
+     ├────────────────────────► │                       │
+     │  (apiClient)             │                       │
+     │                          │  Repository Pattern   │
+     │                          ├──────────────────────►│
+     │                          │                       │
+     │                          │  (JSON for dev,       │
+     │                          │   swap for prod)      │
+     │                          │                       │
+   Pure UI                  All Business Logic    Data Storage
+```
+
+### Key Principles
+
+✅ **Zero business logic in frontend** - UI only  
+✅ **All validation on backend** - Security  
+✅ **Repository pattern** - Database abstraction  
+✅ **Comprehensive tests** - 119 tests  
+✅ **Full documentation** - JSDoc for all services  
+
+## 🔧 Technologies
+
+### Frontend
+- React 18
+- Vite
+- Vitest + React Testing Library
+- CSS Modules
+
+### Backend
+- Express.js
+- Node.js (ES Modules)
+- JSON file database (swappable)
+- Vitest
+- JSDoc + Docdash theme
+
+## 🌐 API Endpoints
+
+See [backend/README.md](./backend/README.md) for complete API documentation.
+
+### Main Endpoints
+- `/health` - Server health check
+- `/api/sensors` - Sensor management
+- `/api/alarmThresholds` - Alarm threshold CRUD
+- `/api/diagnosticTests/run` - Run diagnostics
+- `/api/airQualityStats` - Air quality statistics
+- `/api/export` - Export data (PDF/CSV)
+
+## 📊 Features
+
+### Sensor Management
+- Monitor temperature, humidity, CO2, PM2.5, PM10
+- Real-time data visualization
+- Historical data analysis
+
+### Alarm Thresholds
+- Configure custom thresholds per sensor
+- Format and business rule validation
+- Warning notifications
+
+### Diagnostics
+- Automated sensor testing
+- Test history tracking
+- Status monitoring
+
+### Air Quality Analysis
+- Statistical calculations
+- Date range filtering
+- Multi-sensor aggregation
+
+### Data Export
+- PDF and CSV formats
+- Configurable parameters
+- Validation and error handling
+
+## 🔒 Security & Quality
+
+- **Backend validation** - All data validated server-side
+- **Error classification** - Format vs business errors
+- **Atomic writes** - Data integrity guaranteed
+- **Mutex locking** - Prevents race conditions
+- **Repository pattern** - Database abstraction
+- **Comprehensive tests** - All critical paths tested
+
+## 📝 Documentation
+
+- **JSDoc** - All backend functions documented
+- **README files** - Frontend, backend, and root
+- **Test coverage** - 119 tests with clear assertions
+- **Code comments** - Complex logic explained
+- **Architecture docs** - BUSINESS_LOGIC_CLEANUP.md, TEST_COVERAGE_SUMMARY.md
+
+## 🚀 Deployment
+
+### Development
 ```bash
 npm run dev:all
 ```
 
-To uruchomi jednocześnie:
-- **JSON Server** (baza danych) na `http://localhost:3001`
-- **Vite** (aplikacja React) na `http://localhost:5173`
-
-### Uruchomienie osobno
-
+### Production
 ```bash
-# Tylko aplikacja React
-npm run dev
-
-# Tylko baza danych
-npm run db
-```
-
-## Baza danych
-
-Projekt wykorzystuje **JSON Server** jako lokalną bazę danych opartą na pliku `db.json`.
-
-### Architektura bazy danych
-
-```
-src/
-├── database/
-│   ├── dbConfig.js    # Konfiguracja (URL, headers)
-│   └── dbClient.js    # Klient bazy danych z metodami CRUD
-├── services/
-│   └── sensorService.js  # Serwis używający dbClient
-└── components/
-    └── ...               # Komponenty używające db
-```
-
-### Struktura komponentów
-
-Aplikacja składa się z następujących głównych modułów:
-
-- **Login** - system logowania użytkowników
-- **MainMenu** - menu główne aplikacji
-- **AirQuality** - monitorowanie jakości powietrza z alertami
-- **AlarmThresholds** - konfiguracja progów alarmowych dla czujników
-- **SensorDiagnostics** - diagnostyka i śledzenie stanu czujników
-- **UserDataAnalysis** - analiza zebranych danych pomiarowych
-- **ManageFodder** - zarządzanie karmą dla zwierząt
-- **ExportData** - eksport danych do różnych formatów
-
-## Budowanie i Preview
-
-Aby zbudować aplikację do produkcji i zobaczyć podgląd:
-
-```bash
-# Zbuduj aplikację
+# Build frontend
 npm run build
 
-# Uruchom podgląd produkcji
-npm run preview
+# Start backend
+cd backend && npm start
+
+# Serve frontend build (use nginx, apache, or similar)
 ```
 
-## Testy jednostkowe
+## 🤝 Contributing
 
-Projekt zawiera testy jednostkowe dla logiki biznesowej. Testy pokrywają metody walidacji w `sensorService`:
+This is an educational project. When making changes:
 
-### Uruchomienie testów
+1. Keep business logic on backend
+2. Update tests for new features
+3. Add JSDoc comments for new functions
+4. Run `npm test` before committing
+5. Regenerate docs with `npm run docs`
 
-```bash
-# Uruchom wszystkie testy
-npm test
+## 📚 Additional Documentation
 
-# Uruchom testy w trybie watch
-npm test -- --watch
+- [JSDOC_DOCUMENTATION_SUMMARY.md](./JSDOC_DOCUMENTATION_SUMMARY.md) - Complete JSDoc guide
+- [BUSINESS_LOGIC_CLEANUP.md](./BUSINESS_LOGIC_CLEANUP.md) - Architecture decisions
+- [TEST_COVERAGE_SUMMARY.md](./TEST_COVERAGE_SUMMARY.md) - Test breakdown
+- [backend/README.md](./backend/README.md) - Backend API details
+- [backend/JSDOC_GUIDE.md](./backend/JSDOC_GUIDE.md) - Documentation usage
 
-# Uruchom testy z interfejsem graficznym
-npm run test:ui
-```
+## 📄 License
 
-## Skrypty npm
-
-| Skrypt | Opis |
-|--------|------|
-| `npm run dev` | Uruchom aplikację React |
-| `npm run db` | Uruchom bazę danych JSON Server |
-| `npm run dev:all` | Uruchom aplikację i bazę danych jednocześnie |
-| `npm run build` | Zbuduj aplikację do produkcji |
-| `npm run preview` | Podgląd zbudowanej aplikacji |
-| `npm run lint` | Sprawdź kod linterem |
-| `npm test` | Uruchom testy |
-| `npm run test:ui` | Testy z interfejsem graficznym |
+Private project for educational purposes at Studia/Sem5/projektowanie_oprogramowania.

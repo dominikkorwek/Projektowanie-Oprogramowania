@@ -4,6 +4,9 @@ import { computeAlerts } from '../services/alertsService.js';
 import { login } from '../services/authService.js';
 import { createAlarmThreshold, deleteAlarmThreshold, listAlarmThresholds, updateAlarmThreshold } from '../services/alarmThresholdsService.js';
 import { generateExport } from '../services/exportService.js';
+import { getAvailableSensors, getSensorById } from '../services/sensorService.js';
+import { runDiagnostics, getDiagnosticTests } from '../services/diagnosticService.js';
+import { getAirQualityStats } from '../services/airQualityService.js';
 
 export function buildApiRouter() {
   const router = express.Router();
@@ -14,6 +17,16 @@ export function buildApiRouter() {
   });
   router.get('/sensors', async (req, res, next) => {
     try { res.json(await list('sensors')); } catch (e) { next(e); }
+  });
+  router.get('/sensors/available', async (req, res, next) => {
+    try { res.json(await getAvailableSensors()); } catch (e) { next(e); }
+  });
+  router.get('/sensors/:id', async (req, res, next) => {
+    try {
+      const sensor = await getSensorById(req.params.id);
+      if (!sensor) return res.status(404).json({ message: 'Not found' });
+      res.json(sensor);
+    } catch (e) { next(e); }
   });
   router.get('/measurements', async (req, res, next) => {
     try { res.json(await list('measurements')); } catch (e) { next(e); }
@@ -51,18 +64,15 @@ export function buildApiRouter() {
     } catch (e) { next(e); }
   });
 
-  // Diagnostic tests (CRUD-lite)
+  // Diagnostic tests
   router.get('/diagnosticTests', async (req, res, next) => {
-    try { res.json(await list('diagnosticTests')); } catch (e) { next(e); }
+    try { res.json(await getDiagnosticTests()); } catch (e) { next(e); }
   });
-  router.post('/diagnosticTests', async (req, res, next) => {
-    try { res.status(201).json(await create('diagnosticTests', req.body)); } catch (e) { next(e); }
-  });
-  router.patch('/diagnosticTests/:id', async (req, res, next) => {
+  router.post('/diagnosticTests/run', async (req, res, next) => {
     try {
-      const updated = await patch('diagnosticTests', req.params.id, req.body);
-      if (!updated) return res.status(404).json({ message: 'Not found' });
-      res.json(updated);
+      const sensors = req.body.sensors || [];
+      const result = await runDiagnostics(sensors);
+      res.status(201).json(result);
     } catch (e) { next(e); }
   });
 
@@ -106,9 +116,21 @@ export function buildApiRouter() {
   router.post('/export', async (req, res, next) => {
     try {
       const out = await generateExport(req.body || {});
+      if (!out.ok) {
+        return res.status(out.status).json({ errors: out.errors });
+      }
       res.setHeader('Content-Type', out.contentType);
       res.setHeader('Content-Disposition', `attachment; filename=\"${out.filename}\"`);
       res.status(200).send(out.buffer);
+    } catch (e) { next(e); }
+  });
+
+  // Air Quality Statistics
+  router.get('/airQualityStats', async (req, res, next) => {
+    try {
+      const rangeStart = req.query.rangeStart ? new Date(req.query.rangeStart) : new Date(0);
+      const stats = await getAirQualityStats(rangeStart);
+      res.json(stats);
     } catch (e) { next(e); }
   });
 

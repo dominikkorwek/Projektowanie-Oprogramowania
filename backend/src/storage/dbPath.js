@@ -10,7 +10,7 @@ export function resolveDbPath() {
   if (process.env.DB_PATH && process.env.DB_PATH.trim()) {
     return path.resolve(process.env.DB_PATH.trim());
   }
-  // backend/ -> repo root
-  return path.resolve(process.cwd(), '..', 'db.json');
+  // backend/ -> backend/db.json
+  return path.resolve(process.cwd(), 'db.json');
 }
 

@@ -27,9 +27,9 @@ vi.mock('../../AlarmThresholds/ErrorModal', () => ({
     ) : null
 }))
 
-describe('ExportPanel – logika biznesowa', () => {
+describe('ExportPanel – UI and validation display', () => {
 
-  it('powinien wyświetlić błąd gdy nie wybrano wielkości i czujników', () => {
+  it('powinien wyświetlić błąd gdy nie wybrano wymaganych danych (basic UX check)', () => {
     render(<ExportPanel onBack={vi.fn()} />)
 
     fireEvent.click(screen.getByText('Eksportuj'))
@@ -39,30 +39,39 @@ describe('ExportPanel – logika biznesowa', () => {
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(/Proszę wprowadzić poprawne dane/i)
+      screen.getByText(/Proszę wprowadzić wszystkie wymagane dane/i)
     ).toBeInTheDocument()
   })
 
-  it('powinien wyświetlić błąd gdy data "Od" jest późniejsza niż "Do"', () => {
+  it('powinien wyświetlić błędy walidacji z backendu', async () => {
+    // Mock fetch to simulate backend validation error
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({
+        errors: ['Data "Od" nie może być późniejsza niż "Do"']
+      })
+    })
+
     render(<ExportPanel onBack={vi.fn()} />)
 
-    // zaznacz wielkość
+    // wybór parametrów
     fireEvent.click(screen.getByLabelText('Wielkość A'))
-    // zaznacz czujnik
     fireEvent.click(screen.getByLabelText('Czujnik 1'))
-
-    // ustaw niepoprawne daty
-    fireEvent.change(screen.getByLabelText(/Od/i), {
-      target: { value: '2025-12-31' }
-    })
-    fireEvent.change(screen.getByLabelText(/Do/i), {
-      target: { value: '2025-01-01' }
-    })
 
     fireEvent.click(screen.getByText('Eksportuj'))
 
+    // modal wyboru ścieżki
+    fireEvent.change(screen.getByPlaceholderText(/C:\\Users/i), {
+      target: { value: 'C:\\Test' }
+    })
+
+    fireEvent.click(screen.getByText('Dalej'))
+
+    // Wait for backend validation error to display
+    await screen.findByText(/Data "Od" nie może być późniejsza niż "Do"/i)
+    
     expect(
-      screen.getByText(/Data "Od" nie może być późniejsza niż "Do"/i)
+      screen.getByText(/Niepoprawne parametry/i)
     ).toBeInTheDocument()
   })
 
