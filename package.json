@@ -16,7 +16,8 @@
     "lint": "npm --prefix frontend run lint",
     "test": "npm --prefix backend run test && npm --prefix frontend run test",
     "docs": "jsdoc -c jsdoc.json",
-    "docs:serve": "npm run docs && npx http-server ./docs -o -p 8081"
+    "docs:serve": "npm run docs && npx http-server ./docs -o -p 8081",
+    "e2e": "npx mocha src/tests/e2e/*.spec.cjs"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
