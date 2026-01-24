@@ -3,7 +3,7 @@
     "include": [
       "backend/src",
       "frontend/src",
-      "e2e"
+      "src/tests/e2e"
     ],
     "includePattern": ".+\\.(js|jsx)$",
     "excludePattern": "(node_modules|__tests__|test|dist|build|\\.test\\.|setup\\.js)"
